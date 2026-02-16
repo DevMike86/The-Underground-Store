@@ -3,74 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>The Underground | Uncensored AI Store</title>
+    <title>The Underground Store</title>
     <style>
-        :root { --neon: #00ffcc; --bg: #0a0a0a; --card: #161616; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; padding: 20px; }
-        header { padding: 50px 0; }
-        h1 { color: var(--neon); font-size: 3rem; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 0; }
-        p.subtitle { opacity: 0.7; font-size: 1.1rem; }
-        .store-container { display: flex; justify-content: center; flex-wrap: wrap; gap: 20px; margin-top: 40px; }
-        .app-card { background: var(--card); border: 1px solid #333; border-radius: 15px; padding: 25px; width: 300px; transition: 0.3s; }
-        .app-card:hover { border-color: var(--neon); transform: translateY(-10px); box-shadow: 0 0 20px rgba(0, 255, 204, 0.2); }
-        .download-btn { display: inline-block; background: var(--neon); color: black; padding: 12px 30px; border-radius: 30px; text-decoration: none; font-weight: bold; margin-top: 20px; text-transform: uppercase; }
-        footer { margin-top: 100px; padding: 20px; border-top: 1px solid #222; opacity: 0.5; }
-        .producer-tag { color: var(--neon); font-weight: bold; }
+        body { background-color: #0d1117; color: #c9d1d9; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 50px; }
+        .card { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 30px; display: inline-block; max-width: 400px; box-shadow: 0 8px 24px rgba(0,0,0,0.5); }
+        h1 { color: #58a6ff; margin-bottom: 10px; }
+        .status { font-weight: bold; padding: 10px; border-radius: 6px; background: #21262d; display: block; margin: 20px 0; }
+        .btn { background-color: #238636; color: white; padding: 15px 30px; text-decoration: none; border-radius: 6px; font-weight: bold; display: inline-block; transition: 0.3s; }
+        .btn:hover { background-color: #2ea043; }
+        #api-status { color: #ff7b72; } /* Default Offline Red */
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>The Underground</h1>
-        <p class="subtitle">No Filters. No Boundaries. Pure AI Power.</p>
-    </header>
-
-    <div class="store-container">
-        <div class="app-card">
-            <img src="https://cdn-icons-png.flaticon.com/512/2103/2103633.png" width="80" alt="App Icon">
-            <h3>Dolphin Mobile AI</h3>
-            <p>Full uncensored access. Connects directly to your private home API.</p>
-            <a href="your-app-file.apk" class="download-btn">Download APK</a>
+    <div class="card">
+        <h1>The Underground Store</h1>
+        <p>Uncensored AI. Total Privacy. 2026.</p>
+        
+        <div class="status">
+            SYSTEM STATUS: <span id="api-status">OFFLINE</span>
         </div>
 
-        <div class="app-card" style="opacity: 0.5;">
-            <h3>Coming Soon</h3>
-            <p>The gate is open. We are accepting independent submissions.</p>
-            <span class="download-btn" style="background: #444;">Locked</span>
-        </div>
+        <p style="font-size: 0.8rem; opacity: 0.6; margin-bottom: 25px;">
+            Connection: Your Private Home API
+        </p>
+
+        <a href="YOUR_APK_NAME_HERE.apk" class="btn">DOWNLOAD AI APP</a>
     </div>
 
-    <footer>
-        Produced by <span class="producer-tag">YOU</span> & <span class="producer-tag">Gemini</span><br>
-        Independent Distribution • 2026
-    </footer>
-
-</body>
-</html>
-<div id="status-container" style="margin-top: 20px;">
-    <span style="font-size: 0.9rem; opacity: 0.7;">System Status:</span>
-    <span id="api-status" style="color: #ff4444; font-weight: bold;">OFFLINE</span>
-</div>
-
-<script>
-    // YOUR NGROK LINK GOES HERE
-    const myAPI = "https://your-name.ngrok-free.app/v1/models";
-
-    async function checkStatus() {
-        try {
-            const response = await fetch(myAPI, {
-                headers: { "ngrok-skip-browser-warning": "true" }
-            });
-            if (response.ok) {
-                document.getElementById('api-status').innerText = "ONLINE (UNCENSORED)";
-                document.getElementById('api-status').style.color = "#00ffcc";
-            }
-        } catch (error) {
-            console.log("AI Server is resting.");
-        }
-    }
-    checkStatus();
-</script>  <script>
+    <script>
+        // PASTE YOUR NGROK URL HERE (Keep the /v1)
+        const myAPI = "https://  <script>
         // Use your real ngrok link here!
         const myAPI = "https://  https://unadept-elocutionary-ling.ngrok-free.dev -> http://localhost:1234/v1"; 
 
@@ -96,5 +59,21 @@
     </script>
 </body>
 </html>
+/v1"; 
 
-
+        async function checkStatus() {
+            try {
+                const response = await fetch(myAPI + "/models", {
+                    headers: { "ngrok-skip-browser-warning": "true" }
+                });
+                if (response.ok) {
+                    const statusEl = document.getElementById('api-status');
+                    statusEl.innerText = "ONLINE (UNCENSORED)";
+                    statusEl.style.color = "#3fb950"; // Switch to Green
+                }
+            } catch (e) { console.log("AI is sleeping..."); }
+        }
+        checkStatus();
+    </script>
+</body>
+</html>
