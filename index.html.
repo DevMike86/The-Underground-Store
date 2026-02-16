@@ -70,5 +70,31 @@
         }
     }
     checkStatus();
-</script>
+</script>  <script>
+        // Use your real ngrok link here!
+        const myAPI = "https://  https://unadept-elocutionary-ling.ngrok-free.dev -> http://localhost:1234/v1"; 
+
+        async function checkStatus() {
+            try {
+                // We add /models to the end to see if the AI engine responds
+                const response = await fetch(myAPI + "/models", {
+                    headers: { "ngrok-skip-browser-warning": "true" }
+                });
+                if (response.ok) {
+                    const statusEl = document.getElementById('api-status');
+                    if(statusEl) {
+                        statusEl.innerText = "ONLINE (UNCENSORED)";
+                        statusEl.style.color = "#00ffcc";
+                    }
+                }
+            } catch (e) { 
+                console.log("Checking for AI engine..."); 
+            }
+        }
+        // Run the check as soon as the page opens
+        checkStatus();
+    </script>
+</body>
+</html>
+
 
