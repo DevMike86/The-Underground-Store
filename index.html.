@@ -33,9 +33,10 @@
 
     <script>
         // PASTE YOUR NGROK URL HERE (Keep the /v1)
-        const myAPI = "https://  <script>
+        const myAPI ="https://unadept-elocutionary-ling.ngrok-free.app/v1 -> http://localhost:1234"; 
+<script>
         // Use your real ngrok link here!
-        const myAPI = "https://  https://unadept-elocutionary-ling.ngrok-free.dev -> http://localhost:1234/v1"; 
+        const myAPI = "https://  https://unadept-elocutionary-ling.ngrok-free.app/v1 -> http://localhost:1234"; 
 
         async function checkStatus() {
             try {
