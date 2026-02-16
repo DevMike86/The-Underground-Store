@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE UNDERGROUND</title>
+    <style>
+        :root { --neon-blue: #00f2ff; --neon-purple: #bc13fe; --bg: #050505; --text-gray: #888; }
+        body { background: var(--bg); color: white; font-family: 'Courier New', monospace; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Main Storefront */
+        .main { flex: 2; padding: 40px; overflow-y: auto; border-right: 1px solid #222; }
+        .header { border-bottom: 2px solid var(--neon-blue); margin-bottom: 30px; padding-bottom: 10px; }
+        
+        /* Search Bar */
+        #appSearch { width: 100%; padding: 12px; background: #111; border: 1px solid var(--neon-blue); color: white; margin-bottom: 20px; outline: none; box-sizing: border-box; }
+
+        /* App Grid */
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+        .app-card { background: #111; border: 1px solid #333; padding: 20px; text-align: center; transition: 0.3s; }
+        .app-card:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px var(--neon-blue); }
+        .app-icon { font-size: 40px; margin-bottom: 10px; }
+        .download-btn { background: transparent; border: 1px solid var(--neon-purple); color: var(--neon-purple); padding: 8px 15px; cursor: pointer; font-family: 'Courier New', monospace; margin-top: 10px; }
+        .download-btn:hover { background: var(--neon-purple); color: white; }
+
+        /* AI Sidebar */
+        .sidebar { flex: 1; display: flex; flex-direction: column; background: #0a0a0a; padding: 20px; }
+        #chat-history { flex-grow: 1; overflow-y: auto; font-size: 14px; margin-bottom: 20px; color: #0f0; }
+        .input-area { display: flex; flex-direction: column; gap: 10px; }
+        #userInput { background: #000; border: 1px solid #444; color: #0f0; padding: 10px; outline: none; }
+        .btn-group { display: flex; gap: 10px; }
+        .send-btn { background: #222; color: #0f0; border: 1px solid #0f0; padding: 10px; cursor: pointer; flex: 3; }
+        .clear-btn { background: #222; color: #ff4444; border: 1px solid #ff4444; padding: 10px; cursor: pointer; flex: 1; }
+    </style>
+</head>
+<body>
+
+    <div class="main">
+        <div class="header">
+            <h1>SYSTEM: THE UNDERGROUND</h1>
+            <p style="color: var(--text-gray);">DECENTRALIZED APPLICATION REPOSITORY</p>
+        </div>
+
+        <input type="text" id="appSearch" placeholder="[ SEARCH REPOSITORY... ]" onkeyup="searchApps()">
+
+        <div class="app-grid" id="appGrid">
+            <div class="app-card">
+                <div class="app-icon">🔒</div>
+                <h3>TunnelVPN</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Ghost-protocol encryption.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">⚡</div>
+                <h3>Overclock-X</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Push hardware limits.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">📡</div>
+                <h3>ProxyPeak</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Network transparency tool.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div id="status" style="font-size: 12px; color: var(--text-gray); margin-bottom: 10px;">NODE: [ ONLINE ]</div>
+        <div id="chat-history"></div>
+        <div class="input-area">
+            <input type="text" id="userInput" placeholder="Ask the Clerk..." onkeypress="if(event.key==='Enter') sendMessage()">
+            <div class="btn-group">
+                <button class="send-btn" onclick="sendMessage()">SEND</button>
+                <button class="clear-btn" onclick="clearChat()">CLEAR</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const GATEWAY = "https://unadept-elocutionary-ling.ngrok-free.dev/v1/chat/completions";
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const history = document.getElementById('chat-history');
+            const status = document.getElementById('status');
+            const msg = input.value;
+            if(!msg) return;
+
+            history.innerHTML += `<div><b>YOU:</b> ${msg}</div>`;
+            input.value = '';
+            status.innerText = "NODE: [ PROCESSING... ]";
+
+            try {
+                const response = await fetch(GATEWAY, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json", "ngrok-skip-browser-warning": "true" },
+                    body: JSON.stringify({
+                        messages: [
+                            { role: "system", content: "You are the Underground Clerk. You are helpful, technical, and slightly edgy. You know about TunnelVPN, Overclock-X, and ProxyPeak." },
+                            { role: "user", content: msg }
+                        ],
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                history.innerHTML += `<div style="color: var(--neon-blue);"><b>CLERK:</b> ${data.choices[0].message.content}</div>`;
+                status.innerText = "NODE: [ ONLINE ]";
+            } catch (e) {
+                history.innerHTML += `<div style="color: red;">[ CONNECTION ERROR ]</div>`;
+                status.innerText = "NODE: [ OFFLINE ]";
+            }
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function searchApps() {
+            let input = document.getElementById('appSearch').value.toLowerCase();
+            let cards = document.getElementsByClassName('app-card');
+            for (let card of cards) {
+                let name = card.querySelector('h3').innerText.toLowerCase();
+                card.style.display = name.includes(input) ? "" : "none";
+            }
+        }
+
+        function clearChat() {
+            document.getElementById('chat-history').innerHTML = '';
+        }
+    </script>
+</body>
+</html>
