@@ -47,3 +47,28 @@
 
 </body>
 </html>
+<div id="status-container" style="margin-top: 20px;">
+    <span style="font-size: 0.9rem; opacity: 0.7;">System Status:</span>
+    <span id="api-status" style="color: #ff4444; font-weight: bold;">OFFLINE</span>
+</div>
+
+<script>
+    // YOUR NGROK LINK GOES HERE
+    const myAPI = "https://your-name.ngrok-free.app/v1/models";
+
+    async function checkStatus() {
+        try {
+            const response = await fetch(myAPI, {
+                headers: { "ngrok-skip-browser-warning": "true" }
+            });
+            if (response.ok) {
+                document.getElementById('api-status').innerText = "ONLINE (UNCENSORED)";
+                document.getElementById('api-status').style.color = "#00ffcc";
+            }
+        } catch (error) {
+            console.log("AI Server is resting.");
+        }
+    }
+    checkStatus();
+</script>
+
