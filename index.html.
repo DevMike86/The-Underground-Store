@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Store Terminal</title>
+    <style>
+        body { background: black; color: white; font-family: monospace; text-align: center; padding-top: 100px; }
+        #light { font-size: 30px; font-weight: bold; margin-bottom: 20px; }
+        .box { border: 1px solid #333; display: inline-block; padding: 40px; border-radius: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="box">
+        <div id="light" style="color: gray;">SYSTEM: CONNECTING...</div>
+        <div style="color: #444;">ID: unadept-elocutionary-ling</div>
+    </div>
+
+    <script>
+        // I have pre-loaded your exact link here:
+        const myAPI = "https://unadept-elocutionary-ling.ngrok-free.app/v1";
+
+        async function startEngine() {
+            const status = document.getElementById('light');
+            try {
+                // This "fetch" reaches out to your computer at home
+                const response = await fetch(myAPI + "/models", {
+                    method: "GET",
+                    headers: { "ngrok-skip-browser-warning": "true" }
+                });
+
+                if (response.ok) {
+                    status.innerText = "SYSTEM: ONLINE";
+                    status.style.color = "#00ff00";
+                } else {
+                    status.innerText = "SYSTEM: ERROR 404";
+                    status.style.color = "yellow";
+                }
+            } catch (err) {
+                status.innerText = "SYSTEM: OFFLINE";
+                status.style.color = "red";
+            }
+        }
+
+        // Start checking
+        startEngine();
+        // Check every 10 seconds
+        setInterval(startEngine, 10000);
+    </script>
+</body>
+</html>
