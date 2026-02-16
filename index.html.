@@ -3,48 +3,55 @@
 <head>
     <title>AI Store Terminal</title>
     <style>
-        body { background: black; color: white; font-family: monospace; text-align: center; padding-top: 100px; }
-        #light { font-size: 30px; font-weight: bold; margin-bottom: 20px; }
-        .box { border: 1px solid #333; display: inline-block; padding: 40px; border-radius: 10px; }
+        body { background: #000; color: #fff; font-family: monospace; text-align: center; padding-top: 100px; }
+        #light { font-size: 30px; font-weight: bold; text-shadow: 0 0 10px #333; }
+        .box { border: 1px solid #333; display: inline-block; padding: 40px; border-radius: 10px; background: #050505; }
     </style>
 </head>
 <body>
 
     <div class="box">
-        <div id="light" style="color: gray;">SYSTEM: CONNECTING...</div>
-        <div style="color: #444;">ID: unadept-elocutionary-ling</div>
+        <div id="light">INITIALIZING...</div>
+        <div id="debug" style="color: #444; margin-top: 20px; font-size: 10px;">READY</div>
     </div>
 
     <script>
-        // I have pre-loaded your exact link here:
-        const myAPI = "https://unadept-elocutionary-ling.ngrok-free.app/v1";
+        // Your current tunnel link
+        const base = "https://unadept-elocutionary-ling.ngrok-free.app";
 
-        async function startEngine() {
+        async function probeAI() {
             const status = document.getElementById('light');
-            try {
-                // This "fetch" reaches out to your computer at home
-                const response = await fetch(myAPI + "/models", {
-                    method: "GET",
-                    headers: { "ngrok-skip-browser-warning": "true" }
-                });
+            const debug = document.getElementById('debug');
+            
+            // We try the two most common paths LM Studio uses
+            const paths = ["/v1/models", "/api/v1/models"];
+            
+            for (let path of paths) {
+                try {
+                    const res = await fetch(base + path, {
+                        method: "GET",
+                        headers: { "ngrok-skip-browser-warning": "true" }
+                    });
 
-                if (response.ok) {
-                    status.innerText = "SYSTEM: ONLINE";
-                    status.style.color = "#00ff00";
-                } else {
-                    status.innerText = "SYSTEM: ERROR 404";
-                    status.style.color = "yellow";
+                    if (res.ok) {
+                        status.innerText = "SYSTEM: ONLINE";
+                        status.style.color = "#00ff00";
+                        status.style.textShadow = "0 0 15px #00ff00";
+                        debug.innerText = "CONNECTED VIA " + path;
+                        return; // Stop once we find the right one!
+                    }
+                } catch (e) {
+                    console.log("Trying next path...");
                 }
-            } catch (err) {
-                status.innerText = "SYSTEM: OFFLINE";
-                status.style.color = "red";
             }
+            
+            status.innerText = "SYSTEM: OFFLINE";
+            status.style.color = "red";
+            debug.innerText = "CHECK LM STUDIO SERVER STATUS";
         }
 
-        // Start checking
-        startEngine();
-        // Check every 10 seconds
-        setInterval(startEngine, 10000);
+        probeAI();
+        setInterval(probeAI, 10000);
     </script>
 </body>
 </html>
