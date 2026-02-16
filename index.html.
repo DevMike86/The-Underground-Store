@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+/v1<!DOCTYPE html>
 <html>
 <head>
     <title>AI Store Terminal</title>
@@ -17,7 +17,7 @@
 
     <script>
         // Your current tunnel link
-        const base = "https://unadept-elocutionary-ling.ngrok-free.app";
+        const base = "https://unadept-elocutionary-ling.ngrok-free.app/v1";
 
         async function probeAI() {
             const status = document.getElementById('light');
