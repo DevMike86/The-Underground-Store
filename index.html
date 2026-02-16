@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE UNDERGROUND | APP STORE</title>
+    <style>
+        :root {
+            --neon-green: #00FF00;
+            --dark-bg: #000000;
+            --card-bg: #0a0a0a;
+            --text-gray: #888;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--neon-green);
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- LEFT SIDE: THE STORE --- */
+        .store-container {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+            border-right: 1px solid #111;
+        }
+
+        header {
+            border-bottom: 2px solid var(--neon-green);
+            margin-bottom: 30px;
+            padding-bottom: 10px;
+        }
+
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .app-card {
+            background: var(--card-bg);
+            border: 1px solid #222;
+            padding: 20px;
+            text-align: center;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .app-card:hover {
+            border-color: var(--neon-green);
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .app-icon { font-size: 40px; margin-bottom: 10px; }
+        .download-btn {
+            background: var(--neon-green);
+            color: black;
+            border: none;
+            padding: 8px 15px;
+            margin-top: 15px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- RIGHT SIDE: THE AI ASSISTANT --- */
+        .ai-sidebar {
+            width: 350px;
+            background: #050505;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        #chat-history {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #111;
+            padding: 10px;
+            margin-bottom: 10px;
+            font-size: 13px;
+            color: white;
+        }
+
+        .ai-status { font-size: 10px; margin-bottom: 10px; color: var(--neon-green); }
+        
+        input {
+            background: #000;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 10px;
+            outline: none;
+        }
+
+        .user-msg { color: var(--neon-green); margin-bottom: 10px; }
+        .bot-msg { color: #fff; margin-bottom: 15px; border-left: 2px solid var(--neon-green); padding-left: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="store-container">
+        <header>
+            <h1>THE UNDERGROUND : APPS</h1>
+            <p style="color: white;">[ DECENTRALIZED REPOSITORY ]</p>
+        </header>
+
+        <div class="app-grid">
+            <div class="app-card">
+                <div class="app-icon">🔗</div>
+                <h3>TunnelVPN</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Ghost-protocol encryption.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">⚡</div>
+                <h3>Overclock-X</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Push hardware limits.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+            <div class="app-card">
+                <div class="app-icon">👁️</div>
+                <h3>ProxyPeek</h3>
+                <p style="font-size: 12px; color: var(--text-gray);">Network transparency tool.</p>
+                <button class="download-btn">DOWNLOAD</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ai-sidebar">
+        <div class="ai-status" id="status">NODE: [ CHECKING CONNECTION ]</div>
+        <div id="chat-history">
+            <div class="bot-msg"><b>SYSTEM:</b> Welcome to the Underground. I can help you find applications or answer technical questions. What do you need?</div>
+        </div>
+        <input type="text" id="userInput" placeholder="Ask the AI..." onkeypress="handleKey(event)">
+    </div>
+
+    <script>
+        const GATEWAY = "https://unadept-elocutionary-ling.ngrok-free.dev/v1/chat/completions";
+
+        async function sendMessage() {
+            const input = document.getElementById('userInput');
+            const history = document.getElementById('chat-history');
+            const status = document.getElementById('status');
+            const msg = input.value;
+            if(!msg) return;
+
+            history.innerHTML += `<div class="user-msg"><b>YOU:</b> ${msg}</div>`;
+            input.value = '';
+            status.innerText = "NODE: [ PROCESSING... ]";
+
+            try {
+                const response = await fetch(GATEWAY, {
+                    method: "POST",
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "ngrok-skip-browser-warning": "true" 
+                    },
+                    body: JSON.stringify({
+                        messages: [{ role: "user", content: msg }],
+                        temperature: 0.7
+                    })
+                });
+                const data = await response.json();
+                const aiMsg = data.choices[0].message.content;
+                history.innerHTML += `<div class="bot-msg"><b>AI:</b> ${aiMsg}</div>`;
+                status.innerText = "NODE: [ ONLINE ]";
+            } catch (e) {
+                history.innerHTML += `<div style="color: red;">[ ERROR: CONNECTION LOST ]</div>`;
+                status.innerText = "NODE: [ OFFLINE ]";
+            }
+            history.scrollTop = history.scrollHeight;
+        }
+
+        function handleKey(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        // Initial Ping
+        fetch("https://unadept-elocutionary-ling.ngrok-free.dev/v1/models", {
+            headers: { "ngrok-skip-browser-warning": "true" }
+        }).then(() => document.getElementById('status').innerText = "NODE: [ ONLINE ]")
+          .catch(() => document.getElementById('status').innerText = "NODE: [ OFFLINE ]");
+    </script>
+</body>
+</html>
