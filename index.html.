@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body { background: black; color: #0f0; font-family: monospace; text-align: center; padding-top: 100px; }
+        #status { font-size: 24px; border: 1px solid #0f0; padding: 20px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div id="status">CONNECTING...</div>
+
+    <script>
+        // Double-check this link matches your ngrok window!
+        const myAPI = "https://unadept-elocutionary-ling.ngrok-free.app/v1";
+
+        async function check() {
+            try {
+                const r = await fetch(myAPI + "/models", {
+                    headers: {"ngrok-skip-browser-warning":"true"}
+                });
+                if(r.ok) {
+                    document.getElementById('status').innerText = "ONLINE";
+                    document.getElementById('status').style.color = "#0f0";
+                }
+            } catch(e) {
+                document.getElementById('status').innerText = "OFFLINE";
+                document.getElementById('status').style.color = "red";
+            }
+        }
+        check();
+    </script>
+</body>
+</html>
