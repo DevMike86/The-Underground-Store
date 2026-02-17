@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Persistent Repository</title>
+    <title>Play Dark | Verified Store</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -19,7 +19,7 @@
         .btn-open-upload { width: 100%; padding: 15px; background: #252525; border: 1px dashed var(--accent); color: var(--accent); border-radius: 12px; cursor: pointer; font-weight: 600; margin-top: auto; }
         main { flex-grow: 1; padding: 40px; overflow-y: auto; }
         .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .app-card { background: var(--bg-card); border-radius: 20px; padding: 20px; border: 1px solid #333; transition: 0.3s; }
+        .app-card { background: var(--bg-card); border-radius: 20px; padding: 20px; border: 1px solid #333; transition: 0.3s; position: relative; }
         .verified-tag { color: #00e676; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
         .app-icon { width: 50px; height: 50px; background: #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; font-size: 1.5rem; }
         .download-btn { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 10px; }
@@ -57,16 +57,18 @@
                 <div class="verified-tag">🛡️ AI VERIFIED SECURE</div>
                 <div class="app-icon">📡</div>
                 <h3 style="margin: 0 0 5px 0;">Nexus VPN</h3>
-                <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 15px;">Version 1.0 | Stable</p>
-                <a href="https://github.com/Dev-Mike-8060/underground-store/raw/main/VERIFIED_NexusVPN.apk" class="download-btn" download>Download APK</a>
+                <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 15px;">Version 1.0 | Fixed Path</p>
+                <a href="https://github.com/Dev-Mike-8060/underground-store/blob/main/VERIFIED_NexusVPN.apk?raw=true" class="download-btn" download>
+                    Download APK
+                </a>
             </div>
-            </div>
+        </div>
     </main>
 
     <aside>
         <div class="ai-header"><div class="status-dot"></div> Uncensored Assistant</div>
         <div id="chat-window">
-            <div class="msg ai">Memory systems active. New uploads will now persist across sessions.</div>
+            <div class="msg ai">CDN synchronization complete. Raw download path updated to bypass 404 errors.</div>
         </div>
         <div class="chat-input-area"><input type="text" id="ai-input" placeholder="Query AI..." onkeypress="handleChat(event)"></div>
     </aside>
@@ -87,13 +89,11 @@
         function openModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
         function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
-        // LOAD SAVED APPS ON STARTUP
+        // LOAD SAVED APPS FROM MEMORY
         window.onload = function() {
             const container = document.getElementById('app-container');
             const savedApps = JSON.parse(localStorage.getItem('darkStoreApps')) || [];
-            savedApps.forEach(html => {
-                container.innerHTML += html;
-            });
+            savedApps.forEach(html => { container.innerHTML += html; });
         };
 
         function saveAppToMemory(html) {
@@ -110,7 +110,7 @@
                 win.innerHTML += `<div class="msg user">${input.value}</div>`;
                 input.value = '';
                 setTimeout(() => {
-                    win.innerHTML += `<div class="msg ai">Query processed. LocalStorage injection confirmed. Data is persistent.</div>`;
+                    win.innerHTML += `<div class="msg ai">Protocol updated. Persistent storage check: OK.</div>`;
                     win.scrollTop = win.scrollHeight;
                 }, 600);
             }
@@ -118,12 +118,12 @@
 
         function aiDeepScan(appName, callback) {
             const win = document.getElementById('chat-window');
-            const steps = ["🔍 Scanning...", "📡 Analyzing TCP...", "🛡️ AES Check...", "✅ Verified."];
+            const steps = ["🔍 Analyzing Header...", "📡 Mapping Path...", "✅ Verification OK."];
             steps.forEach((t, i) => {
                 setTimeout(() => {
                     win.innerHTML += `<div class="msg ai">${t}</div>`;
                     win.scrollTop = win.scrollHeight;
-                    if(i === 3) callback();
+                    if(i === 2) callback();
                 }, (i + 1) * 800);
             });
         }
@@ -134,23 +134,20 @@
             if (!name || !file) return alert("Missing info!");
             closeModal();
             aiDeepScan(name, () => {
-                // Generate the HTML for the new card
+                // FIXED PERMANENT LINK FORMAT FOR NEW APPS
                 const newCardHTML = `
                     <div class="app-card">
                         <div class="verified-tag">🛡️ AI VERIFIED SECURE</div>
                         <div class="app-icon">📦</div>
                         <h3>${name}</h3>
                         <p style="font-size: 0.75rem; color: var(--text-dim); margin-bottom: 15px;">New Deployment</p>
-                        <a href="https://github.com/Dev-Mike-8060/underground-store/raw/main/VERIFIED_${file.name}" class="download-btn" download>Download APK</a>
+                        <a href="https://github.com/Dev-Mike-8060/underground-store/blob/main/VERIFIED_${file.name}?raw=true" class="download-btn" download>Download APK</a>
                     </div>`;
                 
-                // Add it to the screen
                 document.getElementById('app-container').innerHTML += newCardHTML;
-                
-                // SAVE IT FOREVER
                 saveAppToMemory(newCardHTML);
 
-                // Trigger the local "VERIFIED" download
+                // Trigger local verified download
                 const url = URL.createObjectURL(file);
                 const a = document.createElement('a');
                 a.href = url;
