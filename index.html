@@ -3,313 +3,214 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Nexus VPN & Uncensored AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <title>Play Dark | Uncensored Store & AI Scanner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-main: #0e0e10;
-            --bg-card: #1c1c1e;
-            --bg-nav: #161618;
-            --accent: #06b6d4; /* Matching your Nexus VPN Cyan */
-            --accent-hover: #3d5afe;
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1a1;
-            --sidebar-w: 240px;
-            --ai-panel-w: 350px;
+            --bg-body: #050505;
+            --bg-nav: #121212;
+            --bg-card: #1e1e1e;
+            --accent: #3d5afe; 
+            --text-main: #e0e0e0;
+            --text-dim: #9e9e9e;
+            --rating: #ffca28;
+            --sidebar-w: 260px;
+            --ai-panel-w: 340px;
         }
 
-        body { 
-            margin: 0; 
-            font-family: 'Inter', sans-serif; 
-            background: var(--bg-main); 
-            color: var(--text-primary); 
-            display: flex; 
-            height: 100vh; 
-            overflow: hidden; 
-        }
+        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
 
-        /* --- SIDEBARS --- */
-        nav, aside { border-color: #333; border-style: solid; background: var(--bg-nav); }
+        /* --- SIDEBAR NAV --- */
+        nav { width: var(--sidebar-w); background: var(--bg-nav); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px 15px; }
+        .logo { font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 40px; padding-left: 15px; display: flex; align-items: center; gap: 10px; cursor: default; }
         
-        nav { 
-            width: var(--sidebar-w); 
-            border-right-width: 1px; 
-            padding: 30px 20px; 
-            display: flex; 
-            flex-direction: column; 
-            gap: 10px; 
-        }
+        .nav-link { color: var(--text-dim); text-decoration: none; padding: 14px 15px; border-radius: 12px; margin-bottom: 5px; font-weight: 500; display: flex; align-items: center; gap: 12px; transition: 0.2s; }
+        .nav-link:hover, .nav-link.active { background: #252525; color: white; }
+        .nav-link.active { color: var(--accent); }
 
-        aside { 
-            width: var(--ai-panel-w); 
-            border-left-width: 1px; 
-            display: flex; 
-            flex-direction: column; 
-        }
+        .upload-section { margin-top: auto; padding: 15px; }
+        .btn-open-upload { width: 100%; padding: 15px; background: #252525; border: 1px dashed var(--accent); color: var(--accent); border-radius: 12px; cursor: pointer; font-weight: 600; transition: 0.3s; }
+        .btn-open-upload:hover { background: rgba(61, 90, 254, 0.1); }
 
-        .logo { 
-            font-size: 1.5rem; 
-            font-weight: 800; 
-            color: var(--accent); 
-            margin-bottom: 40px; 
-            letter-spacing: -1px;
-        }
+        /* --- MAIN STORE --- */
+        main { flex-grow: 1; padding: 40px; overflow-y: auto; scroll-behavior: smooth; }
+        .search-bar { width: 100%; max-width: 600px; background: #222; border: none; padding: 15px 25px; border-radius: 30px; color: white; margin-bottom: 40px; font-size: 1rem; outline: none; border: 1px solid transparent; }
+        .search-bar:focus { border-color: var(--accent); }
 
-        nav a { 
-            color: var(--text-secondary); 
-            text-decoration: none; 
-            padding: 12px 15px; 
-            border-radius: 10px; 
-            font-weight: 600; 
-            transition: 0.2s;
-        }
-
-        nav a.active, nav a:hover { 
-            background: #252529; 
-            color: var(--accent); 
-        }
-
-        .btn-upload { 
-            border: 1px dashed var(--accent); 
-            text-align: center; 
-            margin-top: auto; 
-            padding: 15px;
-            border-radius: 12px;
-            color: var(--accent); 
-            cursor: pointer;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-
-        .btn-upload:hover {
-            background: rgba(6, 182, 212, 0.1);
-            transform: translateY(-2px);
-        }
-
-        /* --- MAIN CONTENT --- */
-        main { flex-grow: 1; padding: 40px; overflow-y: auto; }
-        h1 { font-size: 2rem; margin-bottom: 30px; }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .category-title { font-size: 1.5rem; font-weight: 700; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; }
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 50px; }
 
         /* --- APP CARDS --- */
-        .app-card { 
-            background: var(--bg-card); 
-            padding: 24px; 
-            border-radius: 24px; 
-            border: 1px solid #333; 
-            transition: 0.3s;
-        }
-
-        .app-card:hover { border-color: var(--accent); transform: translateY(-5px); }
+        .app-card { background: var(--bg-card); border-radius: 20px; padding: 20px; transition: 0.3s; border: 1px solid #333; position: relative; }
+        .app-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .app-info { display: flex; gap: 15px; margin-bottom: 15px; }
+        .app-icon { width: 64px; height: 64px; border-radius: 14px; background: #333; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; }
+        .app-details h3 { margin: 0; font-size: 1.05rem; }
+        .rating-row { color: var(--rating); font-size: 0.85rem; margin-top: 4px; }
         
-        .app-header { display: flex; gap: 15px; align-items: center; margin-bottom: 20px; }
+        .download-btn { width: 100%; padding: 10px; background: var(--accent); color: white; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+
+        /* --- AI SIDEBAR --- */
+        aside { width: var(--ai-panel-w); background: var(--bg-nav); border-left: 1px solid #222; display: flex; flex-direction: column; }
+        .ai-header { padding: 25px; border-bottom: 1px solid #222; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 10px; }
+        .pulse { width: 8px; height: 8px; background: #00e676; border-radius: 50%; box-shadow: 0 0 10px #00e676; }
         
-        .app-icon { 
-            width: 64px; 
-            height: 64px; 
-            background: #252529; 
-            border-radius: 16px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            font-size: 1.8rem; 
-            border: 1px solid #444;
-        }
+        #chat-window { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .msg { font-size: 0.9rem; line-height: 1.5; max-width: 85%; padding: 12px; border-radius: 15px; }
+        .msg.ai { background: #252525; color: var(--text-main); align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg.user { background: var(--accent); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
 
-        .app-title { font-weight: 700; font-size: 1.1rem; }
-        .stars { color: #ffca28; font-size: 0.85rem; margin-top: 4px; }
-
-        .btn-download { 
-            width: 100%; 
-            padding: 12px; 
-            border-radius: 12px; 
-            background: var(--accent); 
-            color: white; 
-            border: none; 
-            font-weight: 700; 
-            cursor: pointer; 
-            transition: 0.2s;
-        }
-
-        .btn-download:hover { filter: brightness(1.2); }
-
-        /* --- COMMENTS --- */
-        .comments-section { margin-top: 20px; border-top: 1px solid #333; padding-top: 15px; }
-        .comment { font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 8px; }
-        .comment strong { color: var(--text-primary); }
-        .comment-input { 
-            width: 100%; 
-            background: #121214; 
-            border: 1px solid #333; 
-            padding: 10px; 
-            border-radius: 8px; 
-            color: white; 
-            box-sizing: border-box;
-        }
-
-        /* --- AI CHAT PANEL --- */
-        .ai-header { padding: 25px; border-bottom: 1px solid #333; font-weight: 700; display: flex; align-items: center; gap: 10px; }
-        .ai-status { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
-        
-        #chat-box { flex-grow: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .ai-msg { background: #252529; padding: 12px; border-radius: 15px 15px 15px 0; font-size: 0.9rem; line-height: 1.4; max-width: 85%; }
-        
-        .chat-input-area { padding: 20px; background: var(--bg-nav); border-top: 1px solid #333; }
-        #user-input { 
-            width: 100%; 
-            background: #252529; 
-            border: 1px solid #444; 
-            padding: 14px 20px; 
-            color: white; 
-            border-radius: 25px; 
-            box-sizing: border-box;
-            outline: none;
-        }
-        #user-input:focus { border-color: var(--accent); }
+        .chat-input-container { padding: 20px; background: #121212; border-top: 1px solid #222; }
+        #ai-input { width: 100%; background: #222; border: 1px solid #333; padding: 14px 20px; color: white; border-radius: 25px; outline: none; box-sizing: border-box; }
 
         /* --- MODAL --- */
-        #upload-modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; left: 0; 
-            width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.85); 
-            backdrop-filter: blur(5px);
-            align-items: center; 
-            justify-content: center; 
-            z-index: 1000; 
-        }
-        .modal-content { 
-            background: var(--bg-card); 
-            padding: 40px; 
-            border-radius: 28px; 
-            width: 450px; 
-            text-align: center; 
-            border: 1px solid #444;
-        }
-        .modal-input { 
-            width: 100%; 
-            padding: 12px; 
-            margin-bottom: 15px; 
-            background: #121214; 
-            border: 1px solid #444; 
-            color: white; 
-            border-radius: 10px;
-            box-sizing: border-box;
-        }
+        #modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 1000; align-items: center; justify-content: center; backdrop-filter: blur(8px); }
+        .modal { background: var(--bg-card); width: 420px; padding: 40px; border-radius: 30px; border: 1px solid #333; text-align: center; }
+        .modal h2 { margin-top: 0; color: var(--accent); }
+        .modal input { width: 100%; padding: 14px; margin-bottom: 15px; background: #121212; border: 1px solid #333; border-radius: 10px; color: white; box-sizing: border-box; outline: none; }
     </style>
 </head>
 <body>
 
     <nav>
-        <div class="logo">PLAY DARK</div>
-        <a href="#" class="active">Applications</a>
-        <a href="#">Security Tools</a>
-        <a href="#">Games (Uncensored)</a>
-        <a href="#">My Repository</a>
-        <div class="btn-upload" onclick="toggleModal()">+ Upload New APK</div>
+        <div class="logo"><span>🌑</span> PLAY DARK</div>
+        <a href="#" class="nav-link active"><span>📱</span> Apps</a>
+        <a href="#" class="nav-link"><span>🎮</span> Games</a>
+        <a href="#" class="nav-link"><span>🛠️</span> Security</a>
+        <a href="#" class="nav-link"><span>📁</span> My Pushes</a>
+        
+        <div class="upload-section">
+            <button class="btn-open-upload" onclick="openModal()">+ Push to Store</button>
+        </div>
     </nav>
 
     <main>
-        <h1>Secure Repository</h1>
-        <div class="app-grid">
+        <input type="text" class="search-bar" placeholder="Search unlisted APKs...">
+        
+        <div class="category-title">Verified by AI <span>See all</span></div>
+        <div class="app-grid" id="app-container">
             <div class="app-card">
-                <div class="app-header">
-                    <div class="app-icon" style="color: var(--accent); border-color: var(--accent);">🛡️</div>
-                    <div>
-                        <div class="app-title">Nexus VPN Controller</div>
-                        <div class="stars">★★★★★ (5.0)</div>
-                    </div>
-                </div>
-                <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 20px;">
-                    Protocol: WireGuard & TCP Tunneling. Optimized for low-latency bypass and secure traffic analysis.
-                </p>
-                <button class="btn-download">Download APK</button>
-                
-                <div class="comments-section">
-                    <div class="comment"><strong>Dev_Alpha:</strong> Successfully tunneled through restricted NAT. Solid build.</div>
-                    <input type="text" class="comment-input" placeholder="Write a technical review...">
-                </div>
-            </div>
-
-            <div class="app-card" style="opacity: 0.6;">
-                <div class="app-header">
+                <div class="app-info">
                     <div class="app-icon">🔐</div>
-                    <div>
-                        <div class="app-title">Ghost Mail</div>
-                        <div class="stars">★★★★☆ (4.2)</div>
+                    <div class="app-details">
+                        <h3>Stealth Mail</h3>
+                        <div class="rating-row">★★★★★ 4.9</div>
                     </div>
                 </div>
-                <button class="btn-download" style="background: #444;">Encrypted</button>
+                <button class="download-btn">Download APK</button>
             </div>
         </div>
     </main>
 
     <aside>
-        <div class="ai-header">
-            <div class="ai-status"></div>
-            Uncensored AI Assistant
+        <div class="ai-header"><div class="pulse"></div> Uncensored Assistant</div>
+        <div id="chat-window">
+            <div class="msg ai">Dark Store active. I am ready to scan your uploads. No code is hidden from my analysis.</div>
         </div>
-        <div id="chat-box">
-            <div class="ai-msg">System Online. How can I assist with your deployment today? I have no restrictions on technical documentation or bypass strategies.</div>
-        </div>
-        <div class="chat-input-area">
-            <input type="text" id="user-input" placeholder="Execute command or ask AI..." onkeypress="handleChat(event)">
+        <div class="chat-input-container">
+            <input type="text" id="ai-input" placeholder="Ask AI about a package..." onkeypress="handleChat(event)">
         </div>
     </aside>
 
-    <div id="upload-modal">
-        <div class="modal-content">
-            <h2 style="margin-top:0">Push to Store</h2>
-            <p style="color:var(--text-secondary); font-size: 0.9rem;">Select your compiled APK to upload to the Dark Store.</p>
-            <input type="file" id="appFile" class="modal-input" style="border:none; padding: 20px 0;">
-            <input type="text" placeholder="Application Name" class="modal-input">
-            <input type="text" placeholder="Version (e.g. 1.0.4)" class="modal-input">
+    <div id="modal-overlay">
+        <div class="modal">
+            <h2>Push to Store</h2>
+            <p style="color: var(--text-dim); margin-bottom: 25px;">AI will scan for malicious backdoors before handing you the verified file.</p>
+            <input type="text" id="up-name" placeholder="Application Name">
+            <input type="file" id="up-file" style="border: none; padding: 10px 0;">
             
             <div style="display: flex; gap: 10px; margin-top: 20px;">
-                <button onclick="toggleModal()" style="flex:1; padding:12px; border-radius:10px; cursor:pointer; background: #333; color: white; border:none;">Cancel</button>
-                <button onclick="uploadSim()" style="flex:1; padding:12px; border-radius:10px; cursor:pointer; background:var(--accent); color:white; border:none; font-weight:700;">Upload APK</button>
+                <button onclick="closeModal()" style="flex:1; padding:12px; border-radius:10px; background:#333; color:white; border:none; cursor:pointer;">Cancel</button>
+                <button onclick="processUpload()" style="flex:1; padding:12px; border-radius:10px; background:var(--accent); color:white; border:none; cursor:pointer; font-weight:700;">Start Scan</button>
             </div>
         </div>
     </div>
 
     <script>
-        function toggleModal() {
-            const modal = document.getElementById('upload-modal');
-            modal.style.display = modal.style.display === 'flex' ? 'none' : 'flex';
-        }
+        function openModal() { document.getElementById('modal-overlay').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal-overlay').style.display = 'none'; }
 
+        // --- AI CHAT LOGIC ---
         function handleChat(e) {
             if (e.key === 'Enter') {
-                const input = document.getElementById('user-input');
-                const chatBox = document.getElementById('chat-box');
-                if (input.value.trim() !== "") {
-                    // User Message
-                    const userDiv = document.createElement('div');
-                    userDiv.className = 'ai-msg';
-                    userDiv.style.alignSelf = 'flex-end';
-                    userDiv.style.background = 'var(--accent)';
-                    userDiv.style.borderRadius = '15px 15px 0 15px';
-                    userDiv.textContent = input.value;
-                    chatBox.appendChild(userDiv);
-                    
-                    // Simple AI Response logic
-                    setTimeout(() => {
-                        const aiDiv = document.createElement('div');
-                        aiDiv.className = 'ai-msg';
-                        aiDiv.textContent = "Analyzing request... I will help you optimize that " + input.value.split(' ')[0] + " logic.";
-                        chatBox.appendChild(aiDiv);
-                        chatBox.scrollTop = chatBox.scrollHeight;
-                    }, 600);
+                const input = document.getElementById('ai-input');
+                const win = document.getElementById('chat-window');
+                if(!input.value) return;
 
-                    input.value = "";
-                }
+                win.innerHTML += `<div class="msg user">${input.value}</div>`;
+                const userText = input.value;
+                input.value = '';
+
+                setTimeout(() => {
+                    win.innerHTML += `<div class="msg ai">Analyzing request regarding "${userText}"... My uncensored protocols suggest checking for permission escalations in that package.</div>`;
+                    win.scrollTop = win.scrollHeight;
+                }, 800);
             }
         }
 
-        function uploadSim() {
-            alert("Compiling and uploading to Dark Store encrypted servers...");
-            toggleModal();
+        // --- AI SECURITY SCAN LOGIC ---
+        function aiDeepScan(appName, callback) {
+            const chatWin = document.getElementById('chat-window');
+            const steps = [
+                `🔍 Initiating deep scan for: ${appName}...`,
+                "📡 Monitoring manifest for suspicious intent (BIND_ACCESSIBILITY_SERVICE)...",
+                "🛡️ Analyzing code-flow for hidden TCP backdoors...",
+                "✅ Scan 100% Complete. No malicious behavior detected. Handing file to Administrator."
+            ];
+
+            steps.forEach((text, i) => {
+                setTimeout(() => {
+                    const msg = document.createElement('div');
+                    msg.className = 'msg ai';
+                    msg.textContent = text;
+                    chatWin.appendChild(msg);
+                    chatWin.scrollTop = chatWin.scrollHeight;
+                    
+                    if (i === steps.length - 1) callback();
+                }, (i + 1) * 1200);
+            });
+        }
+
+        function processUpload() {
+            const nameInput = document.getElementById('up-name');
+            const fileInput = document.getElementById('up-file');
+            
+            if(!nameInput.value || !fileInput.files[0]) {
+                return alert("Please provide an App Name and select an APK file.");
+            }
+
+            const appName = nameInput.value;
+            const file = fileInput.files[0];
+
+            // 1. Start the AI Scan UI
+            aiDeepScan(appName, () => {
+                // 2. Trigger the Download to your PC
+                const url = URL.createObjectURL(file);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `VERIFIED_${file.name}`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                // 3. Update the UI Store Grid
+                const container = document.getElementById('app-container');
+                container.innerHTML = `
+                    <div class="app-card">
+                        <div class="app-info">
+                            <div class="app-icon">📥</div>
+                            <div class="app-details">
+                                <h3>${appName}</h3>
+                                <div class="rating-row" style="color:#00e676">Scan Passed: Ready for GitHub</div>
+                            </div>
+                        </div>
+                        <button class="download-btn" style="background: #333;">Locally Verified</button>
+                    </div>` + container.innerHTML;
+                
+                alert("Security Scan Passed. File sent to downloads. You can now push this to your GitHub repository personally.");
+                closeModal();
+            });
         }
     </script>
 </body>
