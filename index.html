@@ -2,131 +2,172 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Nexus</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nexus Admin</title>
     <style>
-        :root { --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8; --gp-text: #e8eaed; --gp-green: #00e676; }
-        body { margin: 0; padding-bottom: 200px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
+        body { background: #121212; color: #e8eaed; font-family: sans-serif; margin: 0; padding-bottom: 200px; }
         
-        /* Header */
-        header { padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--gp-dark); z-index: 100; }
-        .search-container { background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 50%; }
-        #main-search { background: transparent; border: none; color: white; width: 100%; outline: none; }
-        #user-display { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--gp-blue); font-size: 0.8rem; }
-        
-        /* Tabs */
-        .tabs { display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid #3c4043; }
-        .tab { color: #9aa0a6; font-weight: 500; padding: 10px; cursor: pointer; }
-        .tab.active { color: var(--gp-blue); border-bottom: 2px solid var(--gp-blue); }
+        /* Fixed Header */
+        .hdr { background: #202124; padding: 15px; border-bottom: 1px solid #3c4043; display: flex; justify-content: space-between; align-items: center; }
+        #user-tag { color: #8ab4f8; font-weight: bold; font-size: 14px; }
 
+        /* Navigation */
+        .tabs { display: flex; background: #202124; border-bottom: 1px solid #3c4043; }
+        .tab { flex: 1; text-align: center; padding: 15px; color: #9aa0a6; cursor: pointer; font-weight: bold; }
+        .tab.active { color: #8ab4f8; border-bottom: 3px solid #8ab4f8; }
+
+        /* Views */
         .view { display: none; padding: 20px; }
         .view.active { display: block; }
 
-        /* Store */
-        .app-container { background: var(--gp-card); border-radius: 20px; padding: 20px; max-width: 400px; margin: 0 auto; border: 1px solid #444; }
-        .dl-btn { background: var(--gp-blue); color: #202124; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; margin: 15px 0; }
-        .star { font-size: 1.8rem; cursor: pointer; color: #555; }
-        .star.active { color: #fbbc04; }
+        /* Store Card */
+        .card { background: #303134; border-radius: 15px; padding: 20px; border: 1px solid #444; }
+        .dl-btn { background: #8ab4f8; color: #000; display: block; text-align: center; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 15px 0; }
+        
+        /* Ratings */
+        .stars { font-size: 30px; margin: 10px 0; }
+        .star { color: #555; cursor: pointer; }
+        
+        /* Inputs & Buttons */
+        input { width: 100%; padding: 12px; margin: 10px 0; background: #121212; border: 1px solid #555; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
+        .btn { background: #8ab4f8; color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; }
 
         /* Comments */
-        #comment-list { margin-top: 15px; }
-        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 0.85rem; border: 1px solid #333; }
-        .input-row { display: flex; gap: 8px; margin-top: 10px; }
-        input { flex-grow: 1; background: #202124; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; outline: none; }
-        .action-btn { background: var(--gp-blue); color: #202124; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        .comm { background: #121212; padding: 10px; border-radius: 5px; margin-top: 10px; border-left: 3px solid #8ab4f8; }
 
         /* AI Dock */
-        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; }
-        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 10px; height: 40px; }
+        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; }
+        #ai-log { color: #8ab4f8; font-size: 13px; height: 40px; overflow: auto; margin-bottom: 10px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="search-container"><input type="text" id="main-search" placeholder="Search..."></div>
-        <div id="user-display" onclick="switchTab('settings')"><span id="full-username">DevMike86</span></div>
-    </header>
+<div class="hdr">
+    <div style="background:#303134; border-radius:20px; padding:5px 15px; font-size:12px; color:#9aa0a6;">Search Play Dark...</div>
+    <div id="user-tag" onclick="go('settings')">DevMike86</div>
+</div>
 
-    <div class="tabs">
-        <div class="tab active" id="t-store" onclick="switchTab('store')">Store</div>
-        <div class="tab" id="t-admin" onclick="switchTab('admin')">Admin</div>
-        <div class="tab" id="t-settings" onclick="switchTab('settings')">Settings</div>
-    </div>
+<div class="tabs">
+    <div class="tab active" id="t-store" onclick="go('store')">STORE</div>
+    <div class="tab" id="t-admin" onclick="go('admin')">ADMIN</div>
+    <div class="tab" id="t-settings" onclick="go('settings')">SETTINGS</div>
+</div>
 
-    <div id="v-store" class="view active">
-        <div class="app-container">
-            <div style="display:flex; gap:15px; align-items:center;">
-                <div style="font-size:3rem;">📡</div>
-                <div><h2 style="margin:0;">Nexus VPN</h2><b style="color:var(--gp-green);">5.52 MB</b></div>
-            </div>
-            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
-            
-            <p>Rate App:</p>
-            <div id="star-row">
-                <span class="star" onclick="setRate(1)">★</span><span class="star" onclick="setRate(2)">★</span><span class="star" onclick="setRate(3)">★</span><span class="star" onclick="setRate(4)">★</span><span class="star" onclick="setRate(5)">★</span>
-            </div>
-
-            <div id="comment-list"></div>
-            <div class="input-row">
-                <input type="text" id="comm-in" placeholder="Write review...">
-                <button class="action-btn" onclick="postComm()">POST</button>
-            </div>
+<div id="v-store" class="view active">
+    <div class="card">
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span style="font-size:40px;">📡</span>
+            <div><h2 style="margin:0;">Nexus VPN</h2><small style="color:#00e676;">5.52 MB • v1.0</small></div>
         </div>
-    </div>
-
-    <div id="v-admin" class="view">
-        <div id="admin-lock">
-            <input type="password" id="pin" placeholder="Enter PIN (1973)">
-            <button class="action-btn" style="width:100%; margin-top:10px;" onclick="unlockAdmin()">UNLOCK</button>
+        
+        <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
+        
+        <p>Rating:</p>
+        <div class="stars">
+            <span id="s1" onclick="rate(1)">★</span><span id="s2" onclick="rate(2)">★</span><span id="s3" onclick="rate(3)">★</span><span id="s4" onclick="rate(4)">★</span><span id="s5" onclick="rate(5)">★</span>
         </div>
-        <div id="admin-panel" style="display:none;">
-            <h3>AI Scan Uploader</h3>
-            <input type="file" id="f">
-            <button class="action-btn" style="width:100%; margin-top:10px;" onclick="alert('Scan Complete!')">SCAN & PUSH</button>
-        </div>
-    </div>
 
-    <div id="v-settings" class="view">
-        <input type="text" id="name-in" placeholder="New Full Name">
-        <button class="action-btn" style="width:100%; margin-top:10px;" onclick="updateName()">UPDATE PROFILE</button>
+        <div id="c-list"></div>
+        <input type="text" id="c-in" placeholder="Write a review...">
+        <button class="btn" onclick="post()">POST REVIEW</button>
     </div>
+</div>
 
-    <div class="ai-dock">
-        <div id="chat-log"><strong>AI:</strong> System Online.</div>
-        <div class="input-row">
-            <input type="text" id="ai-in" placeholder="Talk to AI...">
-            <button class="action-btn" onclick="sendAI()">➔</button>
-        </div>
+<div id="v-admin" class="view">
+    <div id="lock">
+        <h3>Admin PIN</h3>
+        <input type="password" id="pass" placeholder="Enter 1973">
+        <button class="btn" onclick="unlock()">UNLOCK</button>
     </div>
+    <div id="panel" style="display:none;">
+        <h3>AI Scan Uploader</h3>
+        <input type="text" id="app-name" placeholder="App Name">
+        <input type="file">
+        <button class="btn" onclick="scan()">RUN AI SCAN</button>
+    </div>
+</div>
 
-    <script>
-        // Use very simple functions to avoid browser compatibility errors
-        function switchTab(t) {
-            document.getElementById('v-store').className = 'view';
-            document.getElementById('v-admin').className = 'view';
-            document.getElementById('v-settings').className = 'view';
-            document.getElementById('t-store').className = 'tab';
-            document.getElementById('t-admin').className = 'tab';
-            document.getElementById('t-settings').className = 'tab';
-            
-            document.getElementById('v-' + t).className = 'view active';
-            document.getElementById('t-' + t).className = 'tab active';
+<div id="v-settings" class="view">
+    <h3>Profile Settings</h3>
+    <input type="text" id="name-in" placeholder="Enter Full Username">
+    <button class="btn" onclick="setName()">UPDATE NAME</button>
+</div>
+
+<div class="ai-dock">
+    <div id="ai-log"><b>AI:</b> System Online. Waiting for commands.</div>
+    <div style="display:flex; gap:10px;">
+        <input type="text" id="ai-in" placeholder="Talk to AI assistant...">
+        <button class="btn" style="width:60px;" onclick="talk()">➔</button>
+        <button class="btn" style="width:60px; background:#444; color:#fff;" onclick="clr()">X</button>
+    </div>
+</div>
+
+<script>
+    // NAVIGATION
+    function go(v) {
+        document.querySelectorAll('.view').forEach(x => x.style.display = 'none');
+        document.querySelectorAll('.tab').forEach(x => { x.style.color = '#9aa0a6'; x.style.borderBottom = 'none'; });
+        
+        document.getElementById('v-' + v).style.display = 'block';
+        document.getElementById('t-' + v).style.color = '#8ab4f8';
+        document.getElementById('t-' + v).style.borderBottom = '3px solid #8ab4f8';
+    }
+
+    // RATINGS
+    function rate(n) {
+        for(let i=1; i<=5; i++) {
+            document.getElementById('s'+i).style.color = (i <= n) ? '#fbbc04' : '#555';
         }
+        document.getElementById('ai-log').innerHTML = "<b>AI:</b> Rated " + n + " stars.";
+    }
 
-        function setRate(n) {
-            var s = document.getElementById('star-row').getElementsByClassName('star');
-            for(var i=0; i<5; i++) {
-                s[i].style.color = (i < n) ? '#fbbc04' : '#555';
-            }
-            document.getElementById('chat-log').innerHTML = '<strong>AI:</strong> Rated ' + n + ' stars.';
+    // COMMENTS
+    function post() {
+        let val = document.getElementById('c-in').value;
+        let user = document.getElementById('user-tag').innerText;
+        if(!val) return;
+        let div = document.createElement('div');
+        div.className = 'comm';
+        div.innerHTML = "<b>" + user + ":</b> " + val;
+        document.getElementById('c-list').appendChild(div);
+        document.getElementById('c-in').value = "";
+    }
+
+    // ADMIN
+    function unlock() {
+        if(document.getElementById('pass').value === '1973') {
+            document.getElementById('lock').style.display = 'none';
+            document.getElementById('panel').style.display = 'block';
+            document.getElementById('ai-log').innerHTML = "<b>AI:</b> Admin Unlocked.";
         }
+    }
 
-        function postComm() {
-            var val = document.getElementById('comm-in').value;
-            var user = document.getElementById('full-username').innerText;
-            if(!val) return;
-            var box = document.createElement('div');
-            box.className = 'comment-box';
-            box.innerHTML = '<b>' + user + ':</b> ' + val;
-            document.getElementById('comment-list').appendChild(box);
+    function scan() {
+        document.getElementById('ai-log').innerHTML = "<b>AI:</b> Scanning... Clean. Build pushed.";
+        setTimeout(() => go('store'), 1000);
+    }
+
+    // SETTINGS
+    function setName() {
+        let n = document.getElementById('name-in').value;
+        if(n) {
+            document.getElementById('user-tag').innerText = n;
+            document.getElementById('ai-log').innerHTML = "<b>AI:</b> Profile updated to " + n;
+        }
+    }
+
+    // AI
+    function talk() {
+        let i = document.getElementById('ai-in');
+        if(!i.value) return;
+        document.getElementById('ai-log').innerHTML = "<b>You:</b> " + i.value;
+        i.value = "";
+    }
+
+    function clr() {
+        document.getElementById('ai-log').innerHTML = "<b>AI:</b> History Cleared.";
+    }
+</script>
+
+</body>
+</html>
