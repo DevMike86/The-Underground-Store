@@ -3,87 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Store</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>Play Dark Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8;
+            --gp-text: #e8eaed; --gp-dim: #9aa0a6; --accent-green: #34a853;
+        }
         body { 
-            margin: 0; padding: 20px;
-            font-family: 'Inter', sans-serif; 
-            background-color: #050505; color: #e0e0e0;
-            display: flex; flex-direction: column; align-items: center;
-        }
-        .container { width: 100%; max-width: 500px; }
-        .logo { font-size: 1.5rem; font-weight: 800; color: #3d5afe; text-align: center; margin-bottom: 30px; }
-        
-        /* App Card */
-        .app-card { 
-            background: #1e1e1e; padding: 25px; border-radius: 20px; 
-            border: 1px solid #333; text-align: center; margin-bottom: 20px;
-        }
-        .verified-tag { color: #00e676; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
-        .download-btn { 
-            display: block; margin-top: 15px; padding: 15px; 
-            background: #3d5afe; color: white; text-decoration: none; 
-            border-radius: 12px; font-weight: 700;
+            margin: 0; padding-bottom: 80px; font-family: 'Roboto', sans-serif; 
+            background-color: var(--gp-dark); color: var(--gp-text); 
         }
 
-        /* AI Chat Box */
-        .ai-box { 
-            background: #121212; border: 1px solid #222; 
-            border-radius: 20px; padding: 15px; width: 100%; box-sizing: border-box;
+        /* Top Bar */
+        header { 
+            position: sticky; top: 0; background: var(--gp-dark); z-index: 100;
+            padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between;
         }
-        .ai-header { color: #3d5afe; font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .status-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; }
-        #chat-window { height: 150px; overflow-y: auto; font-size: 0.85rem; color: #9e9e9e; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        .search-bar { 
+            background: var(--gp-card); border-radius: 24px; padding: 8px 20px; 
+            width: 70%; display: flex; align-items: center; color: var(--gp-dim);
+        }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 20px; padding: 10px 20px; border-bottom: 1px solid #3c4043; }
+        .tab { color: var(--gp-dim); text-decoration: none; font-weight: 500; font-size: 0.9rem; padding-bottom: 5px; cursor: pointer; }
+        .tab.active { color: var(--gp-blue); border-bottom: 2px solid var(--gp-blue); }
+
+        /* Store Content */
+        .content { padding: 20px; }
+        .section-title { font-size: 1.1rem; font-weight: 500; margin: 20px 0; }
+        .app-row { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
+        .app-item { width: 110px; flex-shrink: 0; text-align: center; cursor: pointer; }
+        .app-icon { 
+            width: 100px; height: 100px; background: var(--gp-card); 
+            border-radius: 22px; margin: 0 auto 8px; display: flex; 
+            align-items: center; justify-content: center; font-size: 2.5rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .app-name { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Settings View (Hidden by default) */
+        #settings-view { display: none; padding: 20px; }
+        .setting-item { 
+            padding: 15px 0; border-bottom: 1px solid #3c4043; 
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        /* Bottom AI Assistant Dock */
+        .ai-dock { 
+            position: fixed; bottom: 0; width: 100%; background: #171717; 
+            border-top: 1px solid #3c4043; padding: 10px; box-sizing: border-box;
+            display: flex; flex-direction: column; gap: 10px;
+        }
+        #chat-log { height: 40px; font-size: 0.8rem; overflow-y: auto; color: var(--gp-blue); padding: 0 10px; }
+        .input-group { display: flex; gap: 10px; }
         #ai-input { 
-            width: 100%; background: #222; border: 1px solid #333; 
-            padding: 10px; border-radius: 10px; color: white; outline: none; box-sizing: border-box;
+            flex-grow: 1; background: #303134; border: none; padding: 12px; 
+            border-radius: 12px; color: white; outline: none;
         }
-        .msg-ai { color: #3d5afe; margin-bottom: 5px; }
-        .msg-user { color: #e0e0e0; margin-bottom: 5px; text-align: right; }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="logo">🌑 PLAY DARK</div>
+    <header>
+        <div class="search-bar">Search apps & games</div>
+        <div style="width: 32px; height: 32px; background: var(--gp-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #202124;">M</div>
+    </header>
 
-        <div class="app-card">
-            <div class="verified-tag">🛡️ AI VERIFIED SECURE</div>
-            <h2 style="margin:0;">Nexus VPN</h2>
-            <p style="color: #999; font-size: 0.8rem;">Build: Stable | Size: 5.52 MB</p>
-            
-            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="download-btn">
-                Download APK
-            </a>
-        </div>
+    <div class="tabs">
+        <div class="tab active" onclick="showView('store')">For you</div>
+        <div class="tab" onclick="showView('settings')">Settings</div>
+        <div class="tab">Top charts</div>
+    </div>
 
-        <div class="ai-box">
-            <div class="ai-header"><div class="status-dot"></div> AI ASSISTANT</div>
-            <div id="chat-window">
-                <div class="msg-ai"><strong>AI:</strong> Welcome. Connection to DevMike86/The-Underground-Store is stable. 5.52MB file detected.</div>
+    <div id="store-view" class="content">
+        <div class="section-title">Verified Binary Repositories</div>
+        <div class="app-row">
+            <div class="app-item" onclick="window.location.href='https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk'">
+                <div class="app-icon">📡</div>
+                <div class="app-name">Nexus VPN</div>
+                <div style="font-size: 0.7rem; color: var(--gp-dim);">5.52 MB</div>
             </div>
-            <input type="text" id="ai-input" placeholder="Ask Assistant..." onkeypress="handleChat(event)">
+            <div class="app-item">
+                <div class="app-icon" style="opacity: 0.5;">🔒</div>
+                <div class="app-name">Encrypto</div>
+            </div>
+            <div class="app-item">
+                <div class="app-icon" style="opacity: 0.5;">👻</div>
+                <div class="app-name">Ghost Proxy</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="settings-view">
+        <h2>Settings</h2>
+        <div class="setting-item">
+            <div>
+                <div>Auto-update apps</div>
+                <div style="font-size: 0.8rem; color: var(--gp-dim);">Over Wi-Fi only</div>
+            </div>
+            <input type="checkbox" checked>
+        </div>
+        <div class="setting-item">
+            <div>
+                <div>Installation Source</div>
+                <div style="font-size: 0.8rem; color: var(--accent-green);">DevMike86 Verified</div>
+            </div>
+        </div>
+        <button onclick="localStorage.clear(); location.reload();" style="margin-top: 20px; background: none; border: 1px solid red; color: red; padding: 10px; border-radius: 8px;">Clear Cache</button>
+    </div>
+
+    <div class="ai-dock">
+        <div id="chat-log"><strong>Assistant:</strong> Connected to DevMike86 Repo. Build 5.52MB is live.</div>
+        <div class="input-group">
+            <input type="text" id="ai-input" placeholder="Ask AI Store Assistant..." onkeypress="handleChat(event)">
         </div>
     </div>
 
     <script>
+        function showView(view) {
+            document.getElementById('store-view').style.display = view === 'store' ? 'block' : 'none';
+            document.getElementById('settings-view').style.display = view === 'settings' ? 'block' : 'none';
+            
+            // Update Tab active state
+            const tabs = document.querySelectorAll('.tab');
+            tabs[0].classList.toggle('active', view === 'store');
+            tabs[1].classList.toggle('active', view === 'settings');
+        }
+
         function handleChat(e) {
             if (e.key === 'Enter') {
                 const input = document.getElementById('ai-input');
-                const win = document.getElementById('chat-window');
+                const log = document.getElementById('chat-log');
                 if(!input.value) return;
                 
-                win.innerHTML += `<div class="msg-user"><strong>You:</strong> ${input.value}</div>`;
-                const text = input.value.toLowerCase();
+                log.innerHTML = `<strong>You:</strong> ${input.value}`;
+                const txt = input.value.toLowerCase();
                 input.value = '';
                 
                 setTimeout(() => {
-                    let reply = "Path verified. Tap the blue button to pull the 5.52MB package.";
-                    if(text.includes("hello")) reply = "Assistant online. Systems nominal.";
-                    win.innerHTML += `<div class="msg-ai"><strong>AI:</strong> ${reply}</div>`;
-                    win.scrollTop = win.scrollHeight;
-                }, 500);
+                    let reply = "I'm monitoring the DevMike86 repo for new pushes.";
+                    if(txt.includes("vpn")) reply = "Nexus VPN (5.52MB) is the current stable release.";
+                    if(txt.includes("settings")) reply = "You can manage auto-updates in the Settings tab.";
+                    log.innerHTML = `<strong>Assistant:</strong> ${reply}`;
+                }, 600);
             }
         }
     </script>
