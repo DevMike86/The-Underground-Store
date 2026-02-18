@@ -9,7 +9,7 @@
         body { background: var(--bg); color: #e8eaed; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow: hidden; height: 100vh; }
 
         /* Global Header */
-        header { padding: 15px 20px; background: var(--card); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
+        header { padding: 15px 20px; background: var(--card); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-align: center; }
 
         /* View Management */
         .page-container { height: calc(100vh - 130px); overflow-y: auto; position: relative; }
@@ -75,45 +75,4 @@
                 <h3>Nexus VPN v1.0</h3>
                 <button class="btn" style="background:var(--green); margin-bottom:10px;" onclick="downloadAPK()">DOWNLOAD APK</button>
                 <div class="stars" id="star-row">
-                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span><span class="star" onclick="rate(5)">★</span>
-                </div>
-                
-                <div id="comment-list"></div>
-                <input type="text" id="comm-in" placeholder="Write a review..." style="margin-top:10px;">
-                <button class="btn" style="background:#333; color:#fff;" onclick="postComment()">POST REVIEW</button>
-            </div>
-        </div>
-
-        <div id="v-ai" class="view">
-            <div id="ai-log">
-                <div class="bot"><b>SYSTEM:</b> Dolphin 2.9 Uncensored Bridge Active.</div>
-            </div>
-            <div class="card" style="margin-bottom:0; background:#0a0a0a;">
-                <input type="text" id="ai-in" placeholder="Ask Dolphin..." onkeydown="if(event.key==='Enter') talk()">
-                <div style="display:flex; gap:10px;">
-                    <button class="btn" onclick="talk()" style="flex:3;">EXECUTE</button>
-                    <button class="btn" onclick="clearAI()" style="flex:1; background:#222; color:#888;">CLR</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="v-admin" class="view">
-            <h2>Admin Terminal</h2>
-            <div class="card" id="admin-lock">
-                <input type="password" id="pin-code" placeholder="Enter PIN">
-                <button class="btn" onclick="unlockAdmin()">UNLOCK</button>
-            </div>
-            <div id="admin-panel" style="display:none;">
-                <div class="card">
-                    <h3 style="color:var(--green)">✓ ADMIN AUTHENTICATED</h3>
-                    <button class="btn" onclick="adminAction('Scanning system logs...')">SYSTEM AUDIT</button>
-                    <button class="btn btn-red" style="margin-top:10px;" onclick="location.reload()">LOCK</button>
-                </div>
-            </div>
-        </div>
-
-        <div id="v-settings" class="view">
-            <h2>Settings</h2>
-            <div class="card">
-                <label style="color:var(--blue); font-size:12px;">USERNAME</label>
-                <input
+                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span>
