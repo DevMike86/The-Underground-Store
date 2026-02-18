@@ -21,7 +21,30 @@
         /* STORE SIDE */
         #store { flex: 1; padding: 40px; overflow-y: auto; }
         .app-card { background: var(--card); border: 1px solid #333; padding: 30px; border-radius: 15px; max-width: 600px; }
-        .dl-btn { display: block; background: var(--green); color: #000; text-align: center; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 20px 0; }
+        
+        /* PULSING DOWNLOAD BUTTON */
+        .dl-btn { 
+            display: block; 
+            background: var(--green); 
+            color: #000; 
+            text-align: center; 
+            padding: 18px; 
+            border-radius: 8px; 
+            text-decoration: none; 
+            font-weight: bold; 
+            margin: 20px 0; 
+            border: none;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0, 230, 118, 0.2);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0px rgba(0, 230, 118, 0.4); }
+            70% { box-shadow: 0 0 0 15px rgba(0, 230, 118, 0); }
+            100% { box-shadow: 0 0 0 0px rgba(0, 230, 118, 0); }
+        }
+
         .stars { font-size: 30px; margin: 15px 0; color: #333; cursor: pointer; }
         .star.gold { color: #fbbc04; }
     </style>
@@ -43,8 +66,9 @@
     <div id="store">
         <div class="app-card">
             <h1>Nexus VPN <span style="font-size:14px; color:var(--blue);">v1.0</span></h1>
-            <p>Uncensored APK build. Verified stable via local AI audit.</p>
-            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
+            <p>Uncensored APK build. Direct bypass for local restrictions.</p>
+            
+            <button class="dl-btn" onclick="downloadAPK()">DOWNLOAD APK (5.52 MB)</button>
             
             <div class="stars" id="stars">
                 <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
@@ -58,6 +82,18 @@
 
 <script>
     const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
+    const APK_URL = "https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk";
+
+    // FORCED DOWNLOAD FUNCTION
+    function downloadAPK() {
+        const link = document.createElement('a');
+        link.href = APK_URL;
+        link.download = 'NexusVPN.apk'; // Forces the filename
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        addLog('AI', 'Download sequence initiated. Check your notification bar.');
+    }
 
     function checkKey(e) { if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } }
 
@@ -71,17 +107,12 @@
         const i = document.getElementById('input');
         const val = i.value.trim();
         if(!val) return;
-
         addLog('You', val);
         i.value = "";
-
         try {
             const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
                 method: 'POST',
-                headers: { 
-                    'Content-Type': 'application/json',
-                    'ngrok-skip-browser-warning': 'true' // BYPASS NGROK LANDING PAGE
-                },
+                headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
                 body: JSON.stringify({
                     model: "local-model",
                     messages: [{role: "user", content: val}],
@@ -91,7 +122,7 @@
             const data = await res.json();
             addLog('AI', data.choices[0].message.content);
         } catch (e) {
-            addLog('AI', 'Error: Ensure LM Studio Server is running and CORS is enabled.');
+            addLog('AI', 'Error: Connection lost. Ensure LM Studio is active.');
         }
     }
 
@@ -100,6 +131,7 @@
     function rate(n) {
         const s = document.getElementById('stars').children;
         for(let i=0; i<5; i++) s[i].style.color = (i < n) ? '#fbbc04' : '#333';
+        addLog('AI', `User submitted ${n}-star rating.`);
     }
 
     function post() {
