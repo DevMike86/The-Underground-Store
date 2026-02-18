@@ -3,26 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark Store</title>
+    <title>Play Dark | Nexus Admin</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8;
             --gp-text: #e8eaed; --gp-dim: #9aa0a6; --accent-green: #34a853;
+            --accent-red: #ea4335;
         }
         body { 
-            margin: 0; padding-bottom: 80px; font-family: 'Roboto', sans-serif; 
-            background-color: var(--gp-dark); color: var(--gp-text); 
+            margin: 0; padding-bottom: 120px; font-family: 'Roboto', sans-serif; 
+            background-color: var(--gp-dark); color: var(--gp-text); overflow-x: hidden;
         }
 
-        /* Top Bar */
+        /* Header */
         header { 
             position: sticky; top: 0; background: var(--gp-dark); z-index: 100;
             padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between;
         }
         .search-bar { 
             background: var(--gp-card); border-radius: 24px; padding: 8px 20px; 
-            width: 70%; display: flex; align-items: center; color: var(--gp-dim);
+            width: 70%; display: flex; align-items: center; color: var(--gp-dim); font-size: 0.9rem;
+        }
+        #user-avatar { 
+            width: 32px; height: 32px; background: var(--gp-blue); border-radius: 50%; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: bold; color: #202124; cursor: pointer;
         }
 
         /* Tabs */
@@ -30,126 +36,198 @@
         .tab { color: var(--gp-dim); text-decoration: none; font-weight: 500; font-size: 0.9rem; padding-bottom: 5px; cursor: pointer; }
         .tab.active { color: var(--gp-blue); border-bottom: 2px solid var(--gp-blue); }
 
-        /* Store Content */
-        .content { padding: 20px; }
+        /* Content Areas */
+        .content { padding: 20px; display: none; }
+        .content.active { display: block; }
         .section-title { font-size: 1.1rem; font-weight: 500; margin: 20px 0; }
-        .app-row { display: flex; gap: 15px; overflow-x: auto; padding-bottom: 10px; }
-        .app-item { width: 110px; flex-shrink: 0; text-align: center; cursor: pointer; }
+
+        /* App Grid */
+        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 15px; }
+        .app-item { width: 110px; text-align: center; cursor: pointer; text-decoration: none; color: inherit; transition: transform 0.2s; }
+        .app-item:active { transform: scale(0.95); }
         .app-icon { 
-            width: 100px; height: 100px; background: var(--gp-card); 
-            border-radius: 22px; margin: 0 auto 8px; display: flex; 
-            align-items: center; justify-content: center; font-size: 2.5rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            width: 95px; height: 95px; background: var(--gp-card); 
+            border-radius: 20px; margin: 0 auto 8px; display: flex; 
+            align-items: center; justify-content: center; font-size: 2.2rem;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.4); border: 1px solid #444;
         }
-        .app-name { font-size: 0.8rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .app-name { font-size: 0.75rem; font-weight: 400; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Settings View (Hidden by default) */
-        #settings-view { display: none; padding: 20px; }
-        .setting-item { 
-            padding: 15px 0; border-bottom: 1px solid #3c4043; 
-            display: flex; justify-content: space-between; align-items: center;
+        /* Admin & Settings Cards */
+        .setting-card { background: var(--gp-card); padding: 20px; border-radius: 16px; margin-bottom: 15px; border: 1px solid #3c4043; }
+        input[type="text"], input[type="password"], input[type="file"] {
+            width: 100%; padding: 12px; margin-top: 10px; background: #202124; border: 1px solid #555; color: white; border-radius: 8px; box-sizing: border-box;
+        }
+        .btn-action { 
+            margin-top: 15px; width: 100%; padding: 12px; background: var(--gp-blue); 
+            color: #202124; border: none; border-radius: 8px; font-weight: 700; cursor: pointer;
         }
 
-        /* Bottom AI Assistant Dock */
+        /* AI Scan Animation */
+        #scan-status { display: none; margin-top: 15px; padding: 10px; border-radius: 8px; background: #1a1a1a; font-family: monospace; font-size: 0.8rem; }
+        .scanning-text { color: var(--gp-blue); animation: blink 1s infinite; }
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* AI Bottom Dock */
         .ai-dock { 
             position: fixed; bottom: 0; width: 100%; background: #171717; 
-            border-top: 1px solid #3c4043; padding: 10px; box-sizing: border-box;
-            display: flex; flex-direction: column; gap: 10px;
+            border-top: 1px solid #3c4043; padding: 12px; box-sizing: border-box; z-index: 200;
         }
-        #chat-log { height: 40px; font-size: 0.8rem; overflow-y: auto; color: var(--gp-blue); padding: 0 10px; }
-        .input-group { display: flex; gap: 10px; }
-        #ai-input { 
-            flex-grow: 1; background: #303134; border: none; padding: 12px; 
-            border-radius: 12px; color: white; outline: none;
-        }
+        #chat-log { height: 45px; font-size: 0.8rem; overflow-y: auto; color: var(--gp-dim); margin-bottom: 8px; }
+        .ai-controls { display: flex; gap: 8px; align-items: center; }
+        #ai-input { flex-grow: 1; background: #303134; border: none; padding: 10px 15px; border-radius: 20px; color: white; outline: none; font-size: 0.85rem; }
+        .clear-btn { background: transparent; color: var(--gp-dim); border: 1px solid #444; padding: 6px 12px; border-radius: 20px; font-size: 0.7rem; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="search-bar">Search apps & games</div>
-        <div style="width: 32px; height: 32px; background: var(--gp-blue); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #202124;">M</div>
+        <div id="user-avatar" onclick="showView('settings')">D</div>
     </header>
 
     <div class="tabs">
-        <div class="tab active" onclick="showView('store')">For you</div>
-        <div class="tab" onclick="showView('settings')">Settings</div>
-        <div class="tab">Top charts</div>
+        <div class="tab active" id="tab-store" onclick="showView('store')">Apps</div>
+        <div class="tab" id="tab-admin" onclick="showView('admin')">Admin</div>
+        <div class="tab" id="tab-settings" onclick="showView('settings')">Settings</div>
     </div>
 
-    <div id="store-view" class="content">
-        <div class="section-title">Verified Binary Repositories</div>
-        <div class="app-row">
-            <div class="app-item" onclick="window.location.href='https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk'">
+    <div id="store-view" class="content active">
+        <div class="section-title">Nexus Verified Downloads</div>
+        <div class="app-grid" id="main-grid">
+            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="app-item" id="nexus-app">
                 <div class="app-icon">📡</div>
                 <div class="app-name">Nexus VPN</div>
-                <div style="font-size: 0.7rem; color: var(--gp-dim);">5.52 MB</div>
+                <div style="font-size: 0.65rem; color: var(--gp-dim);">5.52 MB | v1.0</div>
+            </a>
+        </div>
+    </div>
+
+    <div id="admin-view" class="content">
+        <div class="section-title">AI Binary Upload</div>
+        <div class="setting-card">
+            <div id="pass-section">
+                <label style="font-size: 0.8rem;">Master Admin PIN</label>
+                <input type="password" id="admin-pass" placeholder="****">
+                <button class="btn-action" onclick="verifyAdmin()">Login</button>
             </div>
-            <div class="app-item">
-                <div class="app-icon" style="opacity: 0.5;">🔒</div>
-                <div class="app-name">Encrypto</div>
-            </div>
-            <div class="app-item">
-                <div class="app-icon" style="opacity: 0.5;">👻</div>
-                <div class="app-name">Ghost Proxy</div>
+
+            <div id="upload-zone" style="display:none;">
+                <label style="font-size: 0.8rem;">New App Identity</label>
+                <input type="text" id="new-app-name" placeholder="App Name">
+                <input type="file" id="new-app-file">
+                
+                <div id="scan-status">
+                    <div class="scanning-text" id="scan-log">> INITIALIZING AI SCAN...</div>
+                </div>
+
+                <button class="btn-action" id="push-btn" onclick="runAIScan()">Run AI Security Scan</button>
             </div>
         </div>
     </div>
 
-    <div id="settings-view">
-        <h2>Settings</h2>
-        <div class="setting-item">
-            <div>
-                <div>Auto-update apps</div>
-                <div style="font-size: 0.8rem; color: var(--gp-dim);">Over Wi-Fi only</div>
-            </div>
-            <input type="checkbox" checked>
+    <div id="settings-view" class="content">
+        <div class="section-title">Store Preferences</div>
+        <div class="setting-card">
+            <label style="font-size: 0.8rem;">User Alias</label>
+            <input type="text" id="username-input" placeholder="DevMike86">
+            <button class="btn-action" onclick="updateUsername()">Apply Changes</button>
         </div>
-        <div class="setting-item">
-            <div>
-                <div>Installation Source</div>
-                <div style="font-size: 0.8rem; color: var(--accent-green);">DevMike86 Verified</div>
-            </div>
-        </div>
-        <button onclick="localStorage.clear(); location.reload();" style="margin-top: 20px; background: none; border: 1px solid red; color: red; padding: 10px; border-radius: 8px;">Clear Cache</button>
     </div>
 
     <div class="ai-dock">
-        <div id="chat-log"><strong>Assistant:</strong> Connected to DevMike86 Repo. Build 5.52MB is live.</div>
-        <div class="input-group">
-            <input type="text" id="ai-input" placeholder="Ask AI Store Assistant..." onkeypress="handleChat(event)">
+        <div id="chat-log"><strong>Assistant:</strong> Nexus Store Online. Awaiting commands...</div>
+        <div class="ai-controls">
+            <input type="text" id="ai-input" placeholder="Message AI Assistant..." onkeypress="handleChat(event)">
+            <button class="clear-btn" onclick="clearAI()">Clear</button>
         </div>
     </div>
 
     <script>
+        // NAVIGATION
         function showView(view) {
-            document.getElementById('store-view').style.display = view === 'store' ? 'block' : 'none';
-            document.getElementById('settings-view').style.display = view === 'settings' ? 'block' : 'none';
-            
-            // Update Tab active state
-            const tabs = document.querySelectorAll('.tab');
-            tabs[0].classList.toggle('active', view === 'store');
-            tabs[1].classList.toggle('active', view === 'settings');
+            document.querySelectorAll('.content').forEach(c => c.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(view + '-view').classList.add('active');
+            document.getElementById('tab-' + view).classList.add('active');
         }
 
-        function handleChat(e) {
-            if (e.key === 'Enter') {
-                const input = document.getElementById('ai-input');
-                const log = document.getElementById('chat-log');
-                if(!input.value) return;
-                
-                log.innerHTML = `<strong>You:</strong> ${input.value}`;
-                const txt = input.value.toLowerCase();
-                input.value = '';
-                
-                setTimeout(() => {
-                    let reply = "I'm monitoring the DevMike86 repo for new pushes.";
-                    if(txt.includes("vpn")) reply = "Nexus VPN (5.52MB) is the current stable release.";
-                    if(txt.includes("settings")) reply = "You can manage auto-updates in the Settings tab.";
-                    log.innerHTML = `<strong>Assistant:</strong> ${reply}`;
-                }, 600);
+        // ADMIN SECURITY
+        function verifyAdmin() {
+            const pass = document.getElementById('admin-pass').value;
+            if (pass === "1973") {
+                document.getElementById('pass-section').style.display = "none";
+                document.getElementById('upload-zone').style.display = "block";
+                addAIChat("AI: Admin privileges unlocked. Ready for binary analysis.");
+            } else {
+                addAIChat("AI: Authentication failed. Restricted access.");
             }
         }
-    </script>
-</body>
-</html>
+
+        // AI UPLOAD SCAN FEATURE
+        function runAIScan() {
+            const name = document.getElementById('new-app-name').value;
+            const file = document.getElementById('new-app-file').value;
+            if (!name || !file) {
+                alert("Please provide an app name and select a file.");
+                return;
+            }
+
+            const scanBox = document.getElementById('scan-status');
+            const log = document.getElementById('scan-log');
+            const btn = document.getElementById('push-btn');
+            
+            scanBox.style.display = "block";
+            btn.disabled = true;
+            btn.innerText = "Scanning...";
+
+            const steps = [
+                "> ANALYZING APK ARCHITECTURE...",
+                "> CHECKING PERMISSION MANIFEST...",
+                "> AI MALWARE HEURISTICS: 0% THREATS FOUND.",
+                "> VERIFYING DIGITAL SIGNATURE...",
+                "> SCAN COMPLETE: SECURE."
+            ];
+
+            let i = 0;
+            const interval = setInterval(() => {
+                log.innerText = steps[i];
+                i++;
+                if (i >= steps.length) {
+                    clearInterval(interval);
+                    setTimeout(() => { finalizePush(name); }, 1000);
+                }
+            }, 800);
+        }
+
+        function finalizePush(name) {
+            const grid = document.getElementById('main-grid');
+            grid.innerHTML += `
+                <div class="app-item">
+                    <div class="app-icon">📦</div>
+                    <div class="app-name">${name}</div>
+                    <div style="font-size: 0.65rem; color: var(--gp-dim);">AI Verified</div>
+                </div>
+            `;
+            addAIChat(`AI: Scan finished for ${name}. Package successfully integrated into grid.`);
+            showView('store');
+            
+            // Reset Admin UI
+            document.getElementById('scan-status').style.display = "none";
+            document.getElementById('push-btn').disabled = false;
+            document.getElementById('push-btn').innerText = "Run AI Security Scan";
+        }
+
+        // USERNAME LOGIC
+        function updateUsername() {
+            const name = document.getElementById('username-input').value;
+            if (name) {
+                document.getElementById('user-avatar').innerText = name.charAt(0).toUpperCase();
+                addAIChat("AI: Interface updated. Hello, " + name + ".");
+            }
+        }
+
+        // AI CHAT LOGIC
+        function handleChat(event) {
+            if (event.key === 'Enter') {
+                const input = document
