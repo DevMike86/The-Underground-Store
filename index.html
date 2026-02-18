@@ -3,70 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Total Nexus</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Play Dark | Nexus</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8;
-            --gp-text: #e8eaed; --gp-dim: #9aa0a6; --gp-green: #00e676;
-        }
-        body { margin: 0; padding-bottom: 180px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
+        :root { --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8; --gp-text: #e8eaed; --gp-green: #00e676; }
+        body { margin: 0; padding-bottom: 200px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
         
+        /* Header */
         header { padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--gp-dark); z-index: 100; }
+        .search-container { background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 50%; }
+        #main-search { background: transparent; border: none; color: white; width: 100%; outline: none; }
+        #user-display { display: flex; align-items: center; gap: 8px; cursor: pointer; color: var(--gp-blue); font-size: 0.8rem; }
         
-        .search-container { background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 50%; display: flex; align-items: center; }
-        #main-search { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.8rem; }
-
-        #user-display { display: flex; align-items: center; gap: 8px; cursor: pointer; }
-        #avatar-circle { width: 30px; height: 30px; background: var(--gp-blue); border-radius: 50%; color: #202124; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        #full-username { font-size: 0.8rem; color: var(--gp-blue); font-weight: 500; white-space: nowrap; }
-
-        .tabs { display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid #3c4043; background: var(--gp-dark); }
-        .tab { color: var(--gp-dim); font-weight: 500; font-size: 0.9rem; padding: 10px; cursor: pointer; }
+        /* Tabs */
+        .tabs { display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid #3c4043; }
+        .tab { color: #9aa0a6; font-weight: 500; padding: 10px; cursor: pointer; }
         .tab.active { color: var(--gp-blue); border-bottom: 2px solid var(--gp-blue); }
 
         .view { display: none; padding: 20px; }
         .view.active { display: block; }
 
-        /* App Card */
+        /* Store */
         .app-container { background: var(--gp-card); border-radius: 20px; padding: 20px; max-width: 400px; margin: 0 auto; border: 1px solid #444; }
-        .app-header { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
-        .app-icon { width: 70px; height: 70px; background: #202124; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #444; }
         .dl-btn { background: var(--gp-blue); color: #202124; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; margin: 15px 0; }
-
-        /* Rating Stars Fix */
-        .rating-stars { display: flex; gap: 8px; color: #555; font-size: 1.8rem; margin: 15px 0; }
-        .star { cursor: pointer; transition: color 0.2s; }
+        .star { font-size: 1.8rem; cursor: pointer; color: #555; }
         .star.active { color: #fbbc04; }
 
-        /* Comment Post Fix */
-        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 0.85rem; border: 1px solid #333; }
-        .comment-input-row { display: flex; gap: 8px; margin-top: 15px; height: 45px; }
-        .comment-input { flex-grow: 1; background: #202124; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; outline: none; }
-        .post-btn { background: var(--gp-blue); color: #202124; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-
-        /* Global UI */
-        input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-top: 10px; background: #171717; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
-        .btn { width: 100%; padding: 12px; background: var(--gp-blue); color: #202124; border: none; border-radius: 8px; font-weight: 700; margin-top: 15px; cursor: pointer; }
+        /* Comments */
+        #comment-list { margin-top: 15px; }
+        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-bottom: 8px; font-size: 0.85rem; border: 1px solid #333; }
+        .input-row { display: flex; gap: 8px; margin-top: 10px; }
+        input { flex-grow: 1; background: #202124; border: 1px solid #444; color: white; padding: 12px; border-radius: 8px; outline: none; }
+        .action-btn { background: var(--gp-blue); color: #202124; border: none; padding: 10px 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
         /* AI Dock */
-        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; z-index: 200; }
-        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 10px; height: 40px; overflow-y: auto; }
-        .ai-input-row { display: flex; gap: 8px; align-items: center; }
-        #ai-in { flex-grow: 1; background: #202124; border: 1px solid #444; padding: 12px; border-radius: 20px; color: white; outline: none; }
-        .send-btn { background: var(--gp-blue); color: #202124; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; }
+        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 10px; height: 40px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="search-container">
-            <input type="text" id="main-search" placeholder="Search..." onkeyup="doSearch()">
-        </div>
-        <div id="user-display" onclick="switchTab('settings')">
-            <span id="full-username">DevMike86</span>
-            <div id="avatar-circle">M</div>
-        </div>
+        <div class="search-container"><input type="text" id="main-search" placeholder="Search..."></div>
+        <div id="user-display" onclick="switchTab('settings')"><span id="full-username">DevMike86</span></div>
     </header>
 
     <div class="tabs">
@@ -76,119 +55,78 @@
     </div>
 
     <div id="v-store" class="view active">
-        <div class="app-container" id="nexus-card">
-            <div class="app-header">
-                <div class="app-icon">📡</div>
-                <div>
-                    <h2 style="margin:0; font-size: 1.2rem;">Nexus VPN</h2>
-                    <div style="color: var(--gp-green); font-size: 0.8rem; font-weight: bold;">5.52 MB • v1.0 Stable</div>
-                </div>
+        <div class="app-container">
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="font-size:3rem;">📡</div>
+                <div><h2 style="margin:0;">Nexus VPN</h2><b style="color:var(--gp-green);">5.52 MB</b></div>
             </div>
-            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">Download APK</a>
+            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
             
-            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 20px; color: var(--gp-dim);">Rate this app</div>
-            <div class="rating-stars">
-                <span class="star" onclick="setRating(1)">★</span>
-                <span class="star" onclick="setRating(2)">★</span>
-                <span class="star" onclick="setRating(3)">★</span>
-                <span class="star" onclick="setRating(4)">★</span>
-                <span class="star" onclick="setRating(5)">★</span>
+            <p>Rate App:</p>
+            <div id="star-row">
+                <span class="star" onclick="setRate(1)">★</span><span class="star" onclick="setRate(2)">★</span><span class="star" onclick="setRate(3)">★</span><span class="star" onclick="setRate(4)">★</span><span class="star" onclick="setRate(5)">★</span>
             </div>
 
-            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 10px;">User Reviews</div>
-            <div id="comment-list">
-                <div class="comment-box"><b style="color: var(--gp-blue);">System:</b> Verified Build active.</div>
-            </div>
-            <div class="comment-input-row">
-                <input type="text" id="user-comment" class="comment-input" placeholder="Add review..." onkeypress="if(event.key==='Enter') addComment()">
-                <button class="post-btn" onclick="addComment()">POST</button>
+            <div id="comment-list"></div>
+            <div class="input-row">
+                <input type="text" id="comm-in" placeholder="Write review...">
+                <button class="action-btn" onclick="postComm()">POST</button>
             </div>
         </div>
     </div>
 
     <div id="v-admin" class="view">
         <div id="admin-lock">
-            <h3>Admin PIN</h3>
-            <input type="password" id="pin" placeholder="1973">
-            <button class="btn" onclick="checkPin()">Unlock</button>
+            <input type="password" id="pin" placeholder="Enter PIN (1973)">
+            <button class="action-btn" style="width:100%; margin-top:10px;" onclick="unlockAdmin()">UNLOCK</button>
         </div>
         <div id="admin-panel" style="display:none;">
-            <h3>AI Security Upload</h3>
-            <input type="text" id="new-name" placeholder="App Name">
-            <input type="file" id="new-file" style="margin-top:10px;">
-            <button class="btn" onclick="runScan()">Scan & Push</button>
+            <h3>AI Scan Uploader</h3>
+            <input type="file" id="f">
+            <button class="action-btn" style="width:100%; margin-top:10px;" onclick="alert('Scan Complete!')">SCAN & PUSH</button>
         </div>
     </div>
 
     <div id="v-settings" class="view">
-        <h3>User Settings</h3>
-        <input type="text" id="new-user" placeholder="Change Full Username">
-        <button class="btn" onclick="changeName()">Update Profile</button>
+        <input type="text" id="name-in" placeholder="New Full Name">
+        <button class="action-btn" style="width:100%; margin-top:10px;" onclick="updateName()">UPDATE PROFILE</button>
     </div>
 
     <div class="ai-dock">
-        <div id="chat-log"><strong>AI:</strong> Terminal Ready. Enter command...</div>
-        <div class="ai-input-row">
-            <input type="text" id="ai-in" placeholder="Ask AI..." onkeypress="if(event.key==='Enter') doChat()">
-            <button class="send-btn" onclick="doChat()">➔</button>
-            <button onclick="document.getElementById('chat-log').innerHTML='<strong>AI:</strong> Ready.';" style="background:#333; color:white; border:none; border-radius:20px; padding:0 12px; height:42px; font-size:0.7rem; cursor:pointer;">Clear</button>
+        <div id="chat-log"><strong>AI:</strong> System Online.</div>
+        <div class="input-row">
+            <input type="text" id="ai-in" placeholder="Talk to AI...">
+            <button class="action-btn" onclick="sendAI()">➔</button>
         </div>
     </div>
 
     <script>
-        function switchTab(target) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('v-' + target).classList.add('active');
-            document.getElementById('t-' + target).classList.add('active');
+        // Use very simple functions to avoid browser compatibility errors
+        function switchTab(t) {
+            document.getElementById('v-store').className = 'view';
+            document.getElementById('v-admin').className = 'view';
+            document.getElementById('v-settings').className = 'view';
+            document.getElementById('t-store').className = 'tab';
+            document.getElementById('t-admin').className = 'tab';
+            document.getElementById('t-settings').className = 'tab';
+            
+            document.getElementById('v-' + t).className = 'view active';
+            document.getElementById('t-' + t).className = 'tab active';
         }
 
-        // STAR RATING FIX - FORCED COLOR UPDATE
-        function setRating(n) {
-            const stars = document.querySelectorAll('.star');
-            stars.forEach((s, i) => {
-                if (i < n) {
-                    s.classList.add('active');
-                } else {
-                    s.classList.remove('active');
-                }
-            });
-            msg("AI: App rated " + n + " stars.");
-        }
-
-        // SEARCH FIX
-        function doSearch() {
-            const term = document.getElementById('main-search').value.toLowerCase();
-            const card = document.getElementById('nexus-card');
-            card.style.display = (term && !"nexus vpn".includes(term)) ? "none" : "block";
-        }
-
-        // COMMENT POST FIX
-        function addComment() {
-            const input = document.getElementById('user-comment');
-            if(!input.value) return;
-            const user = document.getElementById('full-username').innerText;
-            const list = document.getElementById('comment-list');
-            const newComment = document.createElement('div');
-            newComment.className = 'comment-box';
-            newComment.innerHTML = `<b style="color:var(--gp-blue);">${user}:</b> ${input.value}`;
-            list.appendChild(newComment);
-            input.value = '';
-            msg("AI: Review posted successfully.");
-        }
-
-        // USERNAME FIX
-        function changeName() {
-            const name = document.getElementById('new-user').value;
-            if(name) {
-                document.getElementById('full-username').innerText = name;
-                document.getElementById('avatar-circle').innerText = name.charAt(0).toUpperCase();
-                msg("AI: Username updated to " + name);
+        function setRate(n) {
+            var s = document.getElementById('star-row').getElementsByClassName('star');
+            for(var i=0; i<5; i++) {
+                s[i].style.color = (i < n) ? '#fbbc04' : '#555';
             }
+            document.getElementById('chat-log').innerHTML = '<strong>AI:</strong> Rated ' + n + ' stars.';
         }
 
-        // ADMIN LOGIC
-        function checkPin() {
-            if (document.getElementById('pin').value === "1973") {
-                document.getElementById('admin-lock').style.display = 'none';
-                document.getElementById('admin
+        function postComm() {
+            var val = document.getElementById('comm-in').value;
+            var user = document.getElementById('full-username').innerText;
+            if(!val) return;
+            var box = document.createElement('div');
+            box.className = 'comment-box';
+            box.innerHTML = '<b>' + user + ':</b> ' + val;
+            document.getElementById('comment-list').appendChild(box);
