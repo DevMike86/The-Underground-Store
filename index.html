@@ -10,18 +10,16 @@
             --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8;
             --gp-text: #e8eaed; --gp-dim: #9aa0a6; --gp-green: #00e676;
         }
-        body { margin: 0; padding-bottom: 160px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
+        body { margin: 0; padding-bottom: 180px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
         
         header { padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--gp-dark); z-index: 100; }
         
-        /* SEARCH BAR FIX */
-        .search-container { background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 60%; display: flex; align-items: center; }
+        .search-container { background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 50%; display: flex; align-items: center; }
         #main-search { background: transparent; border: none; color: white; width: 100%; outline: none; font-size: 0.8rem; }
 
-        /* FULL USERNAME FIX */
-        #user-display { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+        #user-display { display: flex; align-items: center; gap: 8px; cursor: pointer; }
         #avatar-circle { width: 30px; height: 30px; background: var(--gp-blue); border-radius: 50%; color: #202124; display: flex; align-items: center; justify-content: center; font-weight: bold; }
-        #full-username { font-size: 0.85rem; color: var(--gp-blue); font-weight: 500; }
+        #full-username { font-size: 0.8rem; color: var(--gp-blue); font-weight: 500; white-space: nowrap; }
 
         .tabs { display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid #3c4043; background: var(--gp-dark); }
         .tab { color: var(--gp-dim); font-weight: 500; font-size: 0.9rem; padding: 10px; cursor: pointer; }
@@ -30,36 +28,40 @@
         .view { display: none; padding: 20px; }
         .view.active { display: block; }
 
-        /* Store Layout */
+        /* App Card */
         .app-container { background: var(--gp-card); border-radius: 20px; padding: 20px; max-width: 400px; margin: 0 auto; border: 1px solid #444; }
         .app-header { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
         .app-icon { width: 70px; height: 70px; background: #202124; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #444; }
-        
         .dl-btn { background: var(--gp-blue); color: #202124; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; margin: 15px 0; }
 
-        /* RATING SYSTEM FIX */
-        .rating-stars { display: flex; gap: 5px; color: #555; font-size: 1.5rem; cursor: pointer; margin: 10px 0; }
+        /* Rating Stars Fix */
+        .rating-stars { display: flex; gap: 8px; color: #555; font-size: 1.8rem; margin: 15px 0; }
+        .star { cursor: pointer; transition: color 0.2s; }
         .star.active { color: #fbbc04; }
 
-        /* Comments */
-        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 0.85rem; }
-        .comment-input { width: 100%; background: #202124; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; margin-top: 10px; box-sizing: border-box; }
+        /* Comment Post Fix */
+        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 0.85rem; border: 1px solid #333; }
+        .comment-input-row { display: flex; gap: 8px; margin-top: 15px; height: 45px; }
+        .comment-input { flex-grow: 1; background: #202124; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; outline: none; }
+        .post-btn { background: var(--gp-blue); color: #202124; border: none; padding: 0 15px; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* Forms */
+        /* Global UI */
         input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-top: 10px; background: #171717; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
         .btn { width: 100%; padding: 12px; background: var(--gp-blue); color: #202124; border: none; border-radius: 8px; font-weight: 700; margin-top: 15px; cursor: pointer; }
 
         /* AI Dock */
         .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; z-index: 200; }
-        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 8px; height: 40px; overflow-y: auto; }
-        .ai-input-row { display: flex; gap: 10px; }
+        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 10px; height: 40px; overflow-y: auto; }
+        .ai-input-row { display: flex; gap: 8px; align-items: center; }
+        #ai-in { flex-grow: 1; background: #202124; border: 1px solid #444; padding: 12px; border-radius: 20px; color: white; outline: none; }
+        .send-btn { background: var(--gp-blue); color: #202124; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
     </style>
 </head>
 <body>
 
     <header>
         <div class="search-container">
-            <input type="text" id="main-search" placeholder="Search Play Dark..." onkeyup="doSearch()">
+            <input type="text" id="main-search" placeholder="Search..." onkeyup="doSearch()">
         </div>
         <div id="user-display" onclick="switchTab('settings')">
             <span id="full-username">DevMike86</span>
@@ -84,8 +86,8 @@
             </div>
             <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">Download APK</a>
             
-            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 20px;">Rate this app</div>
-            <div class="rating-stars" id="star-rating">
+            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 20px; color: var(--gp-dim);">Rate this app</div>
+            <div class="rating-stars">
                 <span class="star" onclick="setRating(1)">★</span>
                 <span class="star" onclick="setRating(2)">★</span>
                 <span class="star" onclick="setRating(3)">★</span>
@@ -93,39 +95,43 @@
                 <span class="star" onclick="setRating(5)">★</span>
             </div>
 
-            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 10px;">Reviews</div>
+            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 10px;">User Reviews</div>
             <div id="comment-list">
-                <div class="comment-box"><b style="color: var(--gp-blue);">System:</b> Verified Build 5.52MB active.</div>
+                <div class="comment-box"><b style="color: var(--gp-blue);">System:</b> Verified Build active.</div>
             </div>
-            <input type="text" id="user-comment" class="comment-input" placeholder="Add a public review..." onkeypress="if(event.key==='Enter') addComment()">
+            <div class="comment-input-row">
+                <input type="text" id="user-comment" class="comment-input" placeholder="Add review..." onkeypress="if(event.key==='Enter') addComment()">
+                <button class="post-btn" onclick="addComment()">POST</button>
+            </div>
         </div>
     </div>
 
     <div id="v-admin" class="view">
         <div id="admin-lock">
-            <h3>Admin PIN Required</h3>
-            <input type="password" id="pin" placeholder="Enter PIN">
-            <button class="btn" onclick="checkPin()">Unlock Terminal</button>
+            <h3>Admin PIN</h3>
+            <input type="password" id="pin" placeholder="1973">
+            <button class="btn" onclick="checkPin()">Unlock</button>
         </div>
         <div id="admin-panel" style="display:none;">
-            <h3>AI Malware Scan Uploader</h3>
+            <h3>AI Security Upload</h3>
             <input type="text" id="new-name" placeholder="App Name">
-            <input type="file" id="new-file" style="margin-top:10px; width:100%;">
+            <input type="file" id="new-file" style="margin-top:10px;">
             <button class="btn" onclick="runScan()">Scan & Push</button>
         </div>
     </div>
 
     <div id="v-settings" class="view">
         <h3>User Settings</h3>
-        <input type="text" id="new-user" placeholder="Enter Full Username">
+        <input type="text" id="new-user" placeholder="Change Full Username">
         <button class="btn" onclick="changeName()">Update Profile</button>
     </div>
 
     <div class="ai-dock">
-        <div id="chat-log"><strong>AI:</strong> Assistant Online. All systems functional.</div>
+        <div id="chat-log"><strong>AI:</strong> Terminal Ready. Enter command...</div>
         <div class="ai-input-row">
-            <input type="text" id="ai-in" placeholder="Command AI..." onkeypress="if(event.key==='Enter') doChat()" style="flex-grow:1; background:#202124; border:1px solid #444; padding:10px; border-radius:8px; color:white;">
-            <button onclick="document.getElementById('chat-log').innerHTML='<strong>AI:</strong> Cleared.';" style="background:#333; color:white; border:none; border-radius:8px; padding:0 10px; cursor:pointer;">Clear</button>
+            <input type="text" id="ai-in" placeholder="Ask AI..." onkeypress="if(event.key==='Enter') doChat()">
+            <button class="send-btn" onclick="doChat()">➔</button>
+            <button onclick="document.getElementById('chat-log').innerHTML='<strong>AI:</strong> Ready.';" style="background:#333; color:white; border:none; border-radius:20px; padding:0 12px; height:42px; font-size:0.7rem; cursor:pointer;">Clear</button>
         </div>
     </div>
 
@@ -137,7 +143,52 @@
             document.getElementById('t-' + target).classList.add('active');
         }
 
-        // SEARCH FUNCTION
+        // STAR RATING FIX - FORCED COLOR UPDATE
+        function setRating(n) {
+            const stars = document.querySelectorAll('.star');
+            stars.forEach((s, i) => {
+                if (i < n) {
+                    s.classList.add('active');
+                } else {
+                    s.classList.remove('active');
+                }
+            });
+            msg("AI: App rated " + n + " stars.");
+        }
+
+        // SEARCH FIX
         function doSearch() {
             const term = document.getElementById('main-search').value.toLowerCase();
-            const
+            const card = document.getElementById('nexus-card');
+            card.style.display = (term && !"nexus vpn".includes(term)) ? "none" : "block";
+        }
+
+        // COMMENT POST FIX
+        function addComment() {
+            const input = document.getElementById('user-comment');
+            if(!input.value) return;
+            const user = document.getElementById('full-username').innerText;
+            const list = document.getElementById('comment-list');
+            const newComment = document.createElement('div');
+            newComment.className = 'comment-box';
+            newComment.innerHTML = `<b style="color:var(--gp-blue);">${user}:</b> ${input.value}`;
+            list.appendChild(newComment);
+            input.value = '';
+            msg("AI: Review posted successfully.");
+        }
+
+        // USERNAME FIX
+        function changeName() {
+            const name = document.getElementById('new-user').value;
+            if(name) {
+                document.getElementById('full-username').innerText = name;
+                document.getElementById('avatar-circle').innerText = name.charAt(0).toUpperCase();
+                msg("AI: Username updated to " + name);
+            }
+        }
+
+        // ADMIN LOGIC
+        function checkPin() {
+            if (document.getElementById('pin').value === "1973") {
+                document.getElementById('admin-lock').style.display = 'none';
+                document.getElementById('admin
