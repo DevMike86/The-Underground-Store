@@ -8,7 +8,7 @@
         :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --green: #00e676; --bg: #050505; --red: #ff5252; --gray: #9aa0a6; }
         body { background: var(--bg); color: #e8eaed; font-family: 'Roboto', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
 
-        /* Navigation Bar (Play Store Style) */
+        /* Navigation Bar */
         .nav-bar { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { color: var(--gray); text-align: center; font-size: 10px; cursor: pointer; flex: 1; transition: 0.2s; }
         .nav-item.active { color: var(--blue); }
@@ -19,28 +19,28 @@
         .view.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* App Grid (Resized to Play Store scale) */
+        /* App Grid */
         .section-title { font-size: 16px; font-weight: 500; margin: 20px 0 15px; color: #fff; }
-        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
         .app-item { text-align: center; cursor: pointer; }
-        .app-icon { width: 55px; height: 55px; background: #2a2a2c; border-radius: 12px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .app-icon { width: 55px; height: 55px; background: #2a2a2c; border-radius: 12px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #333; }
         .app-name { font-size: 11px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* AI Chat Terminal */
+        /* AI Terminal */
         #ai-log { height: 60%; overflow-y: auto; background: #000; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 14px; margin-bottom: 10px; border: 1px solid #333; }
         .bot { color: var(--blue); margin-bottom: 10px; }
         .user { color: #fff; text-align: right; margin-bottom: 10px; }
         .chat-input-area { display: flex; gap: 8px; }
 
-        /* UI Elements */
+        /* UI Components */
         .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
         .btn { background: var(--blue); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
         input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
         
-        /* Comments & Stars */
+        /* Interactive Elements */
         .stars { color: #444; font-size: 20px; cursor: pointer; margin-bottom: 10px; }
         .star.gold { color: #fbbc04; }
-        .comment-box { background: #111; padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 12px; }
+        .comment-box { background: #111; padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 12px; border-left: 2px solid var(--blue); }
     </style>
 </head>
 <body>
@@ -51,22 +51,26 @@
             <div id="display-name" style="font-size: 12px; color: var(--gray);">User: DevMike86</div>
         </header>
 
-        <div class="section-title">Recommended for you</div>
-        <div class="app-grid">
-            <div class="app-item"><div class="app-icon">🛡️</div><div class="app-name">VPN</div></div>
-            <div class="app-item"><div class="app-icon">📡</div><div class="app-name">Proxy</div></div>
-            <div class="app-item"><div class="app-icon">☣️</div><div class="app-name">Root</div></div>
-            <div class="app-item"><div class="app-icon">🛡️</div><div class="app-name">Audit</div></div>
+        <div class="section-title">Installed Apps</div>
+        <div class="app-grid" id="main-app-grid">
+            <div class="app-item" onclick="showAppDetails('Nexus VPN')">
+                <div class="app-icon" style="border-color: var(--green);">🛡️</div>
+                <div class="app-name">Nexus VPN</div>
+            </div>
         </div>
 
-        <div class="card" style="margin-top:25px;">
-            <h3>App Reviews</h3>
-            <div class="stars" id="star-row">
-                <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
+        <div id="app-details-area">
+            <div class="card">
+                <h3 id="active-app-title">Nexus VPN v1.0</h3>
+                <div class="stars" id="star-row">
+                    <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
+                </div>
+                <div id="comment-list">
+                    <div class="comment-box"><b>System:</b> Official verified release.</div>
+                </div>
+                <input type="text" id="comm-in" placeholder="Write a review...">
+                <button class="btn" onclick="postComment()">Post Review</button>
             </div>
-            <div id="comment-list"></div>
-            <input type="text" id="comm-in" placeholder="Add a comment...">
-            <button class="btn" onclick="postComment()">Post</button>
         </div>
     </div>
 
@@ -76,7 +80,7 @@
             <div class="bot"><b>SYSTEM:</b> Linked to LM Studio.</div>
         </div>
         <div class="card">
-            <input type="text" id="ai-in" placeholder="Message Dolphin..." onkeydown="if(event.key==='Enter') talk()">
+            <input type="text" id="ai-in" placeholder="Ask Dolphin..." onkeydown="if(event.key==='Enter') talk()">
             <div class="chat-input-area">
                 <button class="btn" onclick="talk()">SEND</button>
                 <button class="btn" onclick="clearAI()" style="background:#333; color:#fff;">CLR</button>
@@ -88,36 +92,37 @@
         <h2 class="section-title">Developer Console</h2>
         <div class="card">
             <h3>Neural Scanner Upload</h3>
-            <p style="font-size: 12px; color: var(--gray);">Directly audit and deposit apps to C:/Nexus_Inbox</p>
+            <p style="font-size: 12px; color: var(--gray);">Audited files will appear on your App Page.</p>
             <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
-            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & AUDIT</button>
+            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & PUBLISH</button>
         </div>
     </div>
 
     <div id="v-settings" class="view">
         <h2 class="section-title">Settings</h2>
         <div class="card">
-            <label style="font-size: 12px; color: var(--blue);">USER PROFILE</label>
-            <input type="text" id="name-input" placeholder="Change Username">
+            <label style="font-size: 12px; color: var(--blue);">DISPLAY NAME</label>
+            <input type="text" id="name-input" placeholder="New Username">
             <button class="btn" onclick="updateProfile()">Save Changes</button>
         </div>
         <div class="card">
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span>Auto-update over Wi-Fi</span>
-                <input type="checkbox" checked style="width:20px;">
+                <input type="checkbox" checked style="width:20px; margin:0;">
             </div>
         </div>
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active" onclick="go('store')"><span class="nav-icon">🛍️</span>Games</div>
-        <div class="nav-item" onclick="go('ai')"><span class="nav-icon">🤖</span>AI</div>
+        <div class="nav-item active" onclick="go('store')"><span class="nav-icon">🛍️</span>Apps</div>
+        <div class="nav-item" onclick="go('ai')"><span class="nav-icon">🤖</span>AI Chat</div>
         <div class="nav-item" onclick="go('admin')"><span class="nav-icon">🛠️</span>Admin</div>
         <div class="nav-item" onclick="go('settings')"><span class="nav-icon">⚙️</span>Settings</div>
     </div>
 
 <script>
     const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
+    let currentUser = "DevMike86";
 
     function go(id) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -136,7 +141,7 @@
         const file = input.files[0];
         if (!file) return;
         go('ai');
-        addLog('AI', `Scanning ${file.name}...`);
+        addLog('AI', `Initiating Neural Audit for: ${file.name}...`);
         
         try {
             const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
@@ -144,7 +149,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     model: "local-model",
-                    messages: [{role: "user", content: `Is file ${file.name} safe? Respond VERDICT: SAFE or VERDICT: DANGER.`}],
+                    messages: [{role: "user", content: `Audit this file: ${file.name}. Is it safe? Respond VERDICT: SAFE or VERDICT: DANGER.`}],
                     temperature: 0.1
                 })
             });
@@ -156,33 +161,46 @@
                 const formData = new FormData();
                 formData.append('file', file);
                 await fetch('http://127.0.0.1:5000/receive', { method: 'POST', body: formData });
-                addLog('AI', "✅ Deposited to C:/Nexus_Inbox");
+                addLog('AI', `✅ Success. ${file.name} published to Store.`);
+                
+                // ADD TO STORE GRID
+                const grid = document.getElementById('main-app-grid');
+                const newApp = document.createElement('div');
+                newApp.className = 'app-item';
+                newApp.onclick = () => showAppDetails(file.name);
+                newApp.innerHTML = `<div class="app-icon">📦</div><div class="app-name">${file.name}</div>`;
+                grid.appendChild(newApp);
             }
-        } catch (e) { addLog('AI', "Error connecting to AI or Python."); }
+        } catch (e) { addLog('AI', "Audit Bridge Offline."); }
     }
 
     async function talk() {
         const i = document.getElementById('ai-in');
-        const msg = i.value;
-        if (!msg) return;
-        addLog('You', msg); i.value = "";
+        if (!i.value) return;
+        addLog('You', i.value);
+        const userMsg = i.value;
+        i.value = "";
         try {
             const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model: "local-model", messages: [{role: "user", content: msg}] })
+                body: JSON.stringify({ model: "local-model", messages: [{role: "user", content: userMsg}] })
             });
             const data = await res.json();
             addLog('AI', data.choices[0].message.content);
-        } catch (e) { addLog('AI', 'AI Offline.'); }
+        } catch (e) { addLog('AI', 'Connection Error.'); }
     }
 
-    function clearAI() { document.getElementById('ai-log').innerHTML = ''; }
+    function showAppDetails(name) {
+        document.getElementById('active-app-title').innerText = name;
+        document.getElementById('comment-list').innerHTML = `<div class="comment-box"><b>System:</b> Displaying logs for ${name}</div>`;
+        rate(0);
+    }
 
     function postComment() {
         const val = document.getElementById('comm-in').value;
         if (val) {
-            document.getElementById('comment-list').innerHTML += `<div class="comment-box"><b>User:</b> ${val}</div>`;
+            document.getElementById('comment-list').innerHTML += `<div class="comment-box"><b>${currentUser}:</b> ${val}</div>`;
             document.getElementById('comm-in').value = "";
         }
     }
@@ -195,10 +213,13 @@
     function updateProfile() {
         const name = document.getElementById('name-input').value;
         if (name) {
+            currentUser = name;
             document.getElementById('display-name').innerText = "User: " + name;
-            alert("Username Updated");
+            alert("Username Saved");
         }
     }
+
+    function clearAI() { document.getElementById('ai-log').innerHTML = '<div class="bot"><b>AI:</b> Logs purged.</div>'; }
 </script>
 </body>
 </html>
