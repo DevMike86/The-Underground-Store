@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus | Play Dark</title>
+    <title>Nexus | LM Studio Terminal</title>
     <style>
         :root { --blue: #8ab4f8; --dark: #121212; --card: #202124; --text: #e8eaed; }
-        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 100px; overflow-x: hidden; }
+        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 120px; overflow-x: hidden; }
         
         /* Header & Tabs */
         .hdr { background: var(--card); padding: 15px; border-bottom: 1px solid #3c4043; display: flex; justify-content: space-between; align-items: center; }
@@ -14,200 +14,174 @@
         .tab { flex: 1; text-align: center; padding: 15px; color: #9aa0a6; cursor: pointer; font-weight: bold; font-size: 13px; }
         .tab.active { color: var(--blue); border-bottom: 3px solid var(--blue); }
 
-        .view { display: none; padding: 20px; animation: fadeIn 0.3s; }
+        .view { display: none; padding: 20px; }
         .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* Store Elements */
         .card { background: #303134; border-radius: 15px; padding: 20px; border: 1px solid #444; margin-bottom: 20px; }
         .dl-btn { background: var(--blue); color: #000; display: block; text-align: center; padding: 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 15px 0; }
-        .stars { font-size: 30px; margin: 10px 0; display: flex; gap: 5px; }
-        .star { color: #555; cursor: pointer; }
-        .comm { background: #121212; padding: 12px; border-radius: 8px; margin-top: 10px; border-left: 3px solid var(--blue); font-size: 14px; }
+        .stars { font-size: 30px; margin: 10px 0; display: flex; gap: 5px; color: #555; }
+        .star.active { color: #fbbc04; }
 
-        /* UI Components */
+        /* Inputs */
         input { width: 100%; padding: 12px; margin: 10px 0; background: #121212; border: 1px solid #555; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 16px; }
         .btn { background: var(--blue); color: #000; border: none; padding: 12px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* AI DOCK & FULL SCREEN EXPANSION */
-        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; transition: height 0.4s ease; z-index: 1000; height: 130px; }
-        .ai-dock.expanded { height: 70vh; } /* Expands to 70% of screen */
+        /* AI DOCK (EXPANDABLE) */
+        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; transition: height 0.4s ease; z-index: 1000; height: 140px; }
+        .ai-dock.expanded { height: 80vh; } 
         
-        #ai-log { color: var(--blue); font-size: 14px; height: calc(100% - 70px); overflow-y: auto; margin-bottom: 10px; line-height: 1.6; }
+        #ai-log { color: var(--blue); font-size: 14px; height: calc(100% - 90px); overflow-y: auto; margin-bottom: 10px; line-height: 1.5; }
         .ai-row { display: flex; gap: 10px; align-items: center; }
-        
-        .ai-msg { margin-bottom: 10px; padding: 5px; border-bottom: 1px solid #222; }
-        .bot-text { color: #fff; }
+        .ai-msg { margin-bottom: 12px; padding: 8px; border-bottom: 1px solid #222; }
     </style>
 </head>
 <body>
 
 <div class="hdr">
-    <div style="color:#9aa0a6; font-size: 12px;">Nexus Repository v1.0</div>
+    <div style="color:#9aa0a6; font-size: 12px;">ENGINE: <span id="status" style="color:red;">OFFLINE</span></div>
     <div id="user-tag" style="color:var(--blue); font-weight:bold;">DevMike86</div>
 </div>
 
 <div class="tabs">
-    <div class="tab active" id="t-store" onclick="go('store')">STORE</div>
-    <div class="tab" id="t-admin" onclick="go('admin')">ADMIN</div>
-    <div class="tab" id="t-settings" onclick="go('settings')">SETTINGS</div>
+    <div class="tab active" onclick="go('store')">STORE</div>
+    <div class="tab" onclick="go('admin')">ADMIN</div>
+    <div class="tab" onclick="go('settings')">SETTINGS</div>
 </div>
 
 <div id="v-store" class="view active">
     <div class="card">
         <div style="display:flex; align-items:center; gap:15px;">
             <span style="font-size:40px;">📡</span>
-            <div><h2 style="margin:0;">Nexus VPN</h2><small style="color:#00e676;">5.52 MB • Verified</small></div>
+            <div><h2 style="margin:0;">Nexus VPN</h2><small style="color:#00e676;">5.52 MB • Uncensored Build</small></div>
         </div>
         <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
-        <p>Rating:</p>
         <div class="stars">
-            <span id="s1" onclick="rate(1)">★</span><span id="s2" onclick="rate(2)">★</span><span id="s3" onclick="rate(3)">★</span><span id="s4" onclick="rate(4)">★</span><span id="s5" onclick="rate(5)">★</span>
+            <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
         </div>
         <div id="c-list"></div>
-        <input type="text" id="c-in" placeholder="Write a review...">
-        <button class="btn" onclick="post()">POST REVIEW</button>
+        <input type="text" id="c-in" placeholder="Write review...">
+        <button class="btn" onclick="postComm()">POST</button>
     </div>
 </div>
 
 <div id="v-admin" class="view">
     <div class="card" id="lock">
-        <h3>Admin PIN</h3>
-        <input type="password" id="pass" placeholder="Enter 1973">
+        <h3>PIN Required</h3>
+        <input type="password" id="pass" placeholder="1973">
         <button class="btn" onclick="unlock()">UNLOCK</button>
     </div>
-    <div class="card" id="panel" style="display:none;">
-        <h3>AI Scan Uploader</h3>
-        <input type="text" id="app-name" placeholder="New App Name">
-        <input type="file" id="app-file">
-        <button class="btn" onclick="scan()">RUN SECURITY AUDIT</button>
+    <div id="panel" style="display:none;" class="card">
+        <h3>AI Malware Scan</h3>
+        <input type="file">
+        <button class="btn" onclick="addLog('AI', 'Scanning binary... Clean.')">SCAN</button>
     </div>
 </div>
 
 <div id="v-settings" class="view">
     <div class="card">
-        <h3>Identity Settings</h3>
-        <input type="text" id="name-in" placeholder="Enter New Username">
-        <button class="btn" onclick="setName()">UPDATE PROFILE</button>
+        <h3>Ngrok + LM Studio Link</h3>
+        <p style="font-size:12px; color:#9aa0a6;">Paste your Ngrok URL (no /v1/ at the end):</p>
+        <input type="text" id="api-url" placeholder="https://your-id.ngrok-free.app">
+        <button class="btn" onclick="saveAPI()">LINK AI ENGINE</button>
     </div>
 </div>
 
 <div class="ai-dock" id="dock">
     <div style="display:flex; justify-content:space-between; margin-bottom:5px;">
-        <small style="color:#555">NEXUS AI ASSISTANT</small>
-        <small onclick="toggleAI()" style="color:var(--blue); cursor:pointer;">[Resize View]</small>
+        <small style="color:var(--blue)">NEXUS AI (LM STUDIO)</small>
+        <small onclick="toggleAI()" style="cursor:pointer; color:#555;">[RESIZE]</small>
     </div>
     <div id="ai-log">
-        <div class="ai-msg"><b>AI:</b> Nexus System active. Standby for user input.</div>
+        <div class="ai-msg"><b>SYSTEM:</b> Link Ngrok in Settings to start.</div>
     </div>
     <div class="ai-row">
-        <input type="text" id="ai-in" placeholder="Command AI..." onfocus="expandAI()">
+        <input type="text" id="ai-in" placeholder="Ask anything..." onfocus="expandAI()">
         <button class="btn" style="width:50px;" onclick="talk()">➔</button>
         <button class="btn" style="width:50px; background:#444; color:#fff;" onclick="clr()">X</button>
     </div>
 </div>
 
 <script>
+    let NGROK_URL = localStorage.getItem('nexus_ngrok') || "";
+    if(NGROK_URL) { document.getElementById('status').innerText = "LINKED"; document.getElementById('status').style.color = "lime"; }
+
     function go(v) {
         document.querySelectorAll('.view').forEach(x => x.style.display = 'none');
-        document.querySelectorAll('.tab').forEach(x => { x.classList.remove('active'); });
         document.getElementById('v-' + v).style.display = 'block';
-        document.getElementById('t-' + v).classList.add('active');
         collapseAI();
     }
 
-    function toggleAI() {
-        document.getElementById('dock').classList.toggle('expanded');
-    }
+    function toggleAI() { document.getElementById('dock').classList.toggle('expanded'); }
+    function expandAI() { document.getElementById('dock').classList.add('expanded'); }
+    function collapseAI() { document.getElementById('dock').classList.remove('expanded'); }
 
-    function expandAI() {
-        document.getElementById('dock').classList.add('expanded');
-    }
-
-    function collapseAI() {
-        document.getElementById('dock').classList.remove('expanded');
+    function saveAPI() {
+        NGROK_URL = document.getElementById('api-url').value.replace(/\/$/, ""); 
+        localStorage.setItem('nexus_ngrok', NGROK_URL);
+        document.getElementById('status').innerText = "LINKED";
+        document.getElementById('status').style.color = "lime";
+        addLog('SYSTEM', 'Ngrok Tunnel saved. Ready to transmit.');
     }
 
     function addLog(who, msg) {
         const log = document.getElementById('ai-log');
-        const color = (who === 'AI') ? '#8ab4f8' : '#fff';
-        log.innerHTML += `<div class="ai-msg"><b style="color:${color}">${who}:</b> <span class="bot-text">${msg}</span></div>`;
+        log.innerHTML += `<div class="ai-msg"><b>${who}:</b> <span>${msg}</span></div>`;
         log.scrollTop = log.scrollHeight;
     }
 
-    function talk() {
+    async function talk() {
         const i = document.getElementById('ai-in');
-        const input = i.value.trim().toLowerCase();
-        if(!input) return;
+        const userMsg = i.value.trim();
+        if(!userMsg || !NGROK_URL) return;
 
-        addLog('You', i.value);
+        addLog('You', userMsg);
         i.value = "";
+        addLog('AI', 'Thinking...');
 
-        // AI Logic Engine
-        setTimeout(() => {
-            if(input.includes('hi') || input.includes('hello')) {
-                addLog('AI', 'Connection established. How can I help with the repository today?');
-            } else if (input.includes('status')) {
-                addLog('AI', 'All systems nominal. Nexus VPN v1.0 is online. 1 active build in storage.');
-            } else if (input.includes('admin')) {
-                addLog('AI', 'Admin terminal requires the 1973 authorization code.');
-            } else {
-                addLog('AI', 'Command received. Analyzing data... I am standing by for specific instructions.');
-            }
-        }, 600);
-    }
+        try {
+            const response = await fetch(`${NGROK_URL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'ngrok-skip-browser-warning': 'true' // Vital for Ngrok free tier
+                },
+                body: JSON.stringify({
+                    model: "local-model", // LM Studio default
+                    messages: [{ role: "user", content: userMsg }],
+                    temperature: 0.7
+                })
+            });
 
-    function rate(n) {
-        for(let i=1; i<=5; i++) {
-            document.getElementById('s'+i).style.color = (i <= n) ? '#fbbc04' : '#555';
+            const data = await response.json();
+            const aiReply = data.choices[0].message.content;
+            
+            // Remove "Thinking..." and add real reply
+            const logs = document.getElementById('ai-log');
+            logs.removeChild(logs.lastChild); 
+            addLog('AI', aiReply);
+
+        } catch (err) {
+            addLog('AI', 'CONNECTION ERROR: Check LM Studio Server or Ngrok Link.');
+            console.error(err);
         }
-        addLog('AI', `Feedback recorded: ${n} star rating applied to Nexus VPN.`);
     }
 
-    function post() {
+    function postComm() {
         const val = document.getElementById('c-in').value;
-        const user = document.getElementById('user-tag').innerText;
         if(!val) return;
-        const div = document.createElement('div');
-        div.className = 'comm';
-        div.innerHTML = `<b>${user}:</b> ${val}`;
-        document.getElementById('c-list').appendChild(div);
+        document.getElementById('c-list').innerHTML += `<div style="background:#121212; padding:10px; border-radius:8px; margin-top:10px; font-size:14px; border-left:3px solid var(--blue);"><b>DevMike86:</b> ${val}</div>`;
         document.getElementById('c-in').value = "";
-        addLog('AI', 'Review successfully published to the community board.');
     }
 
     function unlock() {
         if(document.getElementById('pass').value === '1973') {
             document.getElementById('lock').style.display = 'none';
             document.getElementById('panel').style.display = 'block';
-            addLog('AI', 'Master PIN accepted. Developer privileges unlocked.');
-        } else {
-            addLog('AI', 'Access denied. Incorrect security code.');
         }
     }
 
-    function scan() {
-        const name = document.getElementById('app-name').value || "New App";
-        addLog('AI', `Scanning ${name} for malware signatures...`);
-        setTimeout(() => {
-            addLog('AI', `Scan Complete. 0 threats found. ${name} has been pushed to the store.`);
-            go('store');
-        }, 1500);
-    }
-
-    function setName() {
-        const n = document.getElementById('name-in').value;
-        if(n) {
-            document.getElementById('user-tag').innerText = n;
-            addLog('AI', `User identity updated to ${n}.`);
-            document.getElementById('name-in').value = "";
-        }
-    }
-
-    function clr() {
-        document.getElementById('ai-log').innerHTML = "<b>AI:</b> Terminal logs wiped.";
-        collapseAI();
-    }
+    function clr() { document.getElementById('ai-log').innerHTML = "<b>AI:</b> Logs cleared."; collapseAI(); }
 </script>
 
 </body>
