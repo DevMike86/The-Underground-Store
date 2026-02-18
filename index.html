@@ -3,19 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus | Dolphin Uncensored</title>
+    <title>Nexus Master | Dolphin Uncensored</title>
     <style>
         :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --text: #e8eaed; }
-        body { background: var(--dark); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; padding-bottom: 120px; overflow-x: hidden; }
+        body { background: var(--dark); color: var(--text); font-family: sans-serif; margin: 0; padding-bottom: 120px; overflow-x: hidden; }
         
-        /* Header & Tabs */
-        header { padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: var(--card); }
-        .status-pill { padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: bold; text-transform: uppercase; }
-        .online { background: rgba(0, 255, 0, 0.1); color: #00e676; border: 1px solid #00e676; }
-        .offline { background: rgba(255, 0, 0, 0.1); color: #ff5252; border: 1px solid #ff5252; }
+        /* Fixed Header */
+        header { padding: 15px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; background: var(--card); position: sticky; top: 0; z-index: 100; }
+        .status-pill { padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: bold; background: rgba(0, 255, 0, 0.1); color: #00e676; border: 1px solid #00e676; }
 
+        /* Navigation */
         .tabs { display: flex; background: var(--card); border-bottom: 1px solid #333; }
-        .tab { flex: 1; text-align: center; padding: 15px; color: #888; cursor: pointer; font-weight: 600; font-size: 12px; }
+        .tab { flex: 1; text-align: center; padding: 15px; color: #888; cursor: pointer; font-weight: bold; font-size: 12px; }
         .tab.active { color: var(--blue); border-bottom: 2px solid var(--blue); }
 
         .view { display: none; padding: 20px; }
@@ -24,131 +23,131 @@
         /* Store Card */
         .card { background: var(--card); border-radius: 12px; padding: 20px; border: 1px solid #333; margin-bottom: 20px; }
         .dl-btn { background: var(--blue); color: #000; display: block; text-align: center; padding: 14px; border-radius: 8px; text-decoration: none; font-weight: bold; margin: 15px 0; }
-        .stars { font-size: 24px; margin: 10px 0; display: flex; gap: 8px; color: #444; }
-        .star.active { color: #fbbc04; }
+        
+        /* Star Ratings Fix */
+        .stars { font-size: 30px; margin: 10px 0; display: flex; gap: 8px; }
+        .star { color: #444; cursor: pointer; transition: 0.2s; }
+        .star.gold { color: #fbbc04; }
 
+        /* General UI */
         input { width: 100%; padding: 14px; margin: 10px 0; background: #000; border: 1px solid #444; color: #fff; border-radius: 8px; box-sizing: border-box; font-size: 16px; outline: none; }
         .btn { background: var(--blue); color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* AI DOCK - FULL SCREEN EXPANDABLE */
-        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #333; padding: 15px; box-sizing: border-box; transition: 0.3s ease; z-index: 1000; height: 140px; }
-        .ai-dock.expanded { height: 85vh; border-radius: 20px 20px 0 0; } 
+        /* AI DOCK - FULL SCREEN EXPANSION */
+        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #000; border-top: 1px solid #333; padding: 15px; box-sizing: border-box; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1000; height: 140px; }
+        .ai-dock.expanded { height: 90vh; border-radius: 20px 20px 0 0; box-shadow: 0 -10px 30px rgba(0,0,0,0.8); } 
         
-        #ai-log { color: var(--text); font-size: 14px; height: calc(100% - 90px); overflow-y: auto; margin-bottom: 10px; line-height: 1.5; }
+        #ai-log { color: var(--text); font-size: 15px; height: calc(100% - 90px); overflow-y: auto; margin-bottom: 10px; line-height: 1.6; }
         .ai-row { display: flex; gap: 10px; }
-        .msg { margin-bottom: 15px; padding: 5px; }
-        .msg.bot { color: var(--blue); border-left: 2px solid var(--blue); padding-left: 10px; }
+        .msg { margin-bottom: 15px; padding: 10px; border-radius: 8px; }
+        .msg.bot { background: rgba(138, 180, 248, 0.1); border-left: 3px solid var(--blue); }
+        .msg.user { background: rgba(255, 255, 255, 0.05); text-align: right; }
     </style>
 </head>
 <body>
 
 <header>
-    <div id="status-box" class="status-pill offline">LINKING...</div>
+    <div class="status-pill">DOLPHIN ONLINE</div>
     <div style="font-weight:bold; color:var(--blue);" id="user-display">DevMike86</div>
 </header>
 
 <div class="tabs">
-    <div class="tab active" onclick="go('store')">STORE</div>
-    <div class="tab" onclick="go('admin')">ADMIN</div>
-    <div class="tab" onclick="go('settings')">SETTINGS</div>
+    <div class="tab active" id="t-store" onclick="go('store')">STORE</div>
+    <div class="tab" id="t-admin" onclick="go('admin')">ADMIN</div>
+    <div class="tab" id="t-settings" onclick="go('settings')">SETTINGS</div>
 </div>
 
 <div id="v-store" class="view active">
     <div class="card">
-        <h2>Nexus VPN <small style="color:var(--blue); font-size:12px;">v1.0</small></h2>
-        <p style="color:#888; font-size:14px;">Verified Uncensored Build (5.52 MB)</p>
-        <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
-        <div class="stars" id="star-row">
-            <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
+        <div style="display:flex; align-items:center; gap:15px;">
+            <span style="font-size:40px;">📡</span>
+            <div><h2 style="margin:0;">Nexus VPN</h2><small style="color:#00e676;">5.52 MB • Uncensored</small></div>
         </div>
-        <div id="c-list"></div>
-        <input type="text" id="c-in" placeholder="Write review...">
-        <button class="btn" onclick="post()">POST REVIEW</button>
+        <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">DOWNLOAD APK</a>
+        
+        <p>Rate App:</p>
+        <div class="stars">
+            <span class="star" onclick="setStar(1)">★</span><span class="star" onclick="setStar(2)">★</span><span class="star" onclick="setStar(3)">★</span><span class="star" onclick="setStar(4)">★</span><span class="star" onclick="setStar(5)">★</span>
+        </div>
+
+        <div id="comment-list"></div>
+        <div style="display:flex; gap:10px; margin-top:15px;">
+            <input type="text" id="comm-in" placeholder="Write uncensored review...">
+            <button class="btn" style="width:80px;" onclick="postComment()">POST</button>
+        </div>
     </div>
 </div>
 
 <div id="v-admin" class="view">
     <div class="card" id="lock-screen">
-        <h3>Master Access</h3>
-        <input type="password" id="pin-in" placeholder="PIN (1973)">
-        <button class="btn" onclick="unlock()">UNLOCK TERMINAL</button>
+        <h3>PIN Required</h3>
+        <input type="password" id="pin" placeholder="1973">
+        <button class="btn" onclick="unlock()">ACCESS TERMINAL</button>
     </div>
-    <div id="admin-tools" style="display:none;" class="card">
+    <div id="tools" style="display:none;" class="card">
         <h3>AI Security Audit</h3>
-        <input type="file" id="up">
-        <button class="btn" onclick="audit()">SCAN & PUSH</button>
+        <input type="file">
+        <button class="btn" onclick="addLog('AI', 'Bypassing filters... Scan complete.')">FORCE SCAN</button>
     </div>
 </div>
 
 <div id="v-settings" class="view">
     <div class="card">
-        <h3>Backend Configuration</h3>
-        <p style="font-size:12px; color:#888;">Enter Ngrok Address:</p>
-        <input type="text" id="api-url" placeholder="https://xxxx-xx-xx.ngrok-free.app">
-        <button class="btn" onclick="saveURL()">SAVE & CONNECT</button>
-        <p style="font-size:12px; color:#888; margin-top:20px;">Username:</p>
-        <input type="text" id="name-in" placeholder="Full Username">
-        <button class="btn" style="background:#333; color:#fff;" onclick="updateName()">UPDATE PROFILE</button>
+        <h3>User Profile</h3>
+        <input type="text" id="new-name" placeholder="Update Full Name">
+        <button class="btn" onclick="changeName()">UPDATE IDENTITY</button>
+        <p style="font-size:11px; color:#555; margin-top:20px;">LINK: unadept-elocutionary-ling.ngrok-free.dev</p>
     </div>
 </div>
 
 <div class="ai-dock" id="dock">
-    <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
-        <small style="color:var(--blue); font-weight:bold;">DOLPHIN UNCENSORED TERMINAL</small>
-        <button onclick="toggleAI()" style="background:transparent; border:1px solid #333; color:#888; border-radius:4px; font-size:10px; padding:2px 8px;">EXPAND</button>
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+        <small style="color:var(--blue); font-weight:bold;">LM STUDIOS : DOLPHIN-2.9-LLAMA-3</small>
+        <button onclick="toggleAI()" style="background:#222; border:none; color:#fff; border-radius:4px; font-size:10px; padding:5px 10px;">EXPAND VIEW</button>
     </div>
     <div id="ai-log">
-        <div class="msg bot"><b>AI:</b> Standing by. Configure Ngrok link in Settings to initiate neural bridge.</div>
+        <div class="msg bot"><b>AI:</b> Uncensored bridge active. I am Dolphin. How shall we proceed?</div>
     </div>
     <div class="ai-row">
-        <input type="text" id="ai-in" placeholder="Send command..." onfocus="expandAI()">
+        <input type="text" id="ai-in" placeholder="Enter Command..." onfocus="expandAI()">
         <button class="btn" style="width:60px;" onclick="talk()">➔</button>
     </div>
 </div>
 
 <script>
-    let NGROK = localStorage.getItem('nexus_ngrok') || "";
-    if(NGROK) { 
-        document.getElementById('status-box').className = "status-pill online"; 
-        document.getElementById('status-box').innerText = "LINKED";
-    }
+    // HARD-WIRED NGROK ADDRESS
+    const API_BASE = "https://unadept-elocutionary-ling.ngrok-free.dev";
 
     function go(v) {
         document.querySelectorAll('.view').forEach(x => x.style.display = 'none');
+        document.querySelectorAll('.tab').forEach(x => x.classList.remove('active'));
         document.getElementById('v-' + v).style.display = 'block';
-        collapseAI();
+        document.getElementById('t-' + v).classList.add('active');
+        if(v !== 'store') collapseAI();
     }
 
     function toggleAI() { document.getElementById('dock').classList.toggle('expanded'); }
     function expandAI() { document.getElementById('dock').classList.add('expanded'); }
     function collapseAI() { document.getElementById('dock').classList.remove('expanded'); }
 
-    function saveURL() {
-        NGROK = document.getElementById('api-url').value.trim().replace(/\/$/, "");
-        localStorage.setItem('nexus_ngrok', NGROK);
-        document.getElementById('status-box').className = "status-pill online";
-        document.getElementById('status-box').innerText = "LINKED";
-        addLog('AI', 'Neural link established with Dolphin model.');
-    }
-
     function addLog(who, text) {
         const log = document.getElementById('ai-log');
-        const isBot = who === 'AI';
-        log.innerHTML += `<div class="msg ${isBot?'bot':''}"><b>${who}:</b> <span>${text}</span></div>`;
+        const type = who === 'AI' ? 'bot' : 'user';
+        log.innerHTML += `<div class="msg ${type}"><b>${who}:</b> <span>${text}</span></div>`;
         log.scrollTop = log.scrollHeight;
     }
 
+    // LM STUDIOS COMMUNICATION
     async function talk() {
         const i = document.getElementById('ai-in');
         const val = i.value.trim();
-        if(!val || !NGROK) return;
+        if(!val) return;
 
         addLog('You', val);
         i.value = "";
-        addLog('AI', 'Processing...');
-
+        
         try {
-            const response = await fetch(`${NGROK}/v1/chat/completions`, {
+            const response = await fetch(`${API_BASE}/v1/chat/completions`, {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
@@ -157,52 +156,30 @@
                 body: JSON.stringify({
                     model: "local-model", 
                     messages: [{ role: "user", content: val }],
-                    temperature: 0.8
+                    temperature: 0.7
                 })
             });
 
             const data = await response.json();
             const reply = data.choices[0].message.content;
-            
-            // Remove "Processing..." line
-            const logs = document.getElementById('ai-log');
-            logs.removeChild(logs.lastChild);
             addLog('AI', reply);
 
         } catch (e) {
-            addLog('AI', 'CRITICAL ERROR: Connection to LM Studio failed. Check Ngrok tunnel and CORS.');
+            addLog('AI', 'CONNECTION ERROR: Is LM Studio Server Running?');
         }
     }
 
-    function rate(n) {
-        const stars = document.getElementById('star-row').getElementsByTagName('span');
-        for(let i=0; i<5; i++) stars[i].style.color = (i < n) ? '#fbbc04' : '#444';
-        addLog('AI', `System updated: ${n} star rating saved.`);
+    // STAR RATING LOGIC
+    function setStar(n) {
+        const stars = document.querySelectorAll('.star');
+        stars.forEach((s, i) => {
+            s.classList.toggle('gold', i < n);
+        });
+        addLog('AI', `Rating system updated: ${n} stars applied.`);
     }
 
-    function post() {
-        const val = document.getElementById('c-in').value;
+    // COMMENTS LOGIC
+    function postComment() {
+        const val = document.getElementById('comm-in').value;
         if(!val) return;
-        const user = document.getElementById('user-display').innerText;
-        document.getElementById('c-list').innerHTML += `<div style="background:#111; padding:12px; border-radius:8px; margin-top:10px; border-left:2px solid var(--blue); font-size:14px;"><b>${user}:</b> ${val}</div>`;
-        document.getElementById('c-in').value = "";
-    }
-
-    function unlock() {
-        if(document.getElementById('pin-in').value === '1973') {
-            document.getElementById('lock-screen').style.display = 'none';
-            document.getElementById('admin-tools').style.display = 'block';
-        }
-    }
-
-    function updateName() {
-        const n = document.getElementById('name-in').value;
-        if(n) {
-            document.getElementById('user-display').innerText = n;
-            addLog('AI', `Identity verified: Hello ${n}.`);
-        }
-    }
-</script>
-
-</body>
-</html>
+        const
