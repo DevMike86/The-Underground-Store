@@ -62,6 +62,8 @@
         <div id="app-details-area">
             <div class="card">
                 <h3 id="active-app-title">Nexus VPN v1.0</h3>
+                <button class="btn" id="dl-btn" style="background: var(--green); margin-bottom: 15px;" onclick="downloadApp()">DOWNLOAD NOW</button>
+                
                 <div class="stars" id="star-row">
                     <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
                 </div>
@@ -123,103 +125,4 @@
 <script>
     const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
     let currentUser = "DevMike86";
-
-    function go(id) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.getElementById('v-' + id).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        event.currentTarget.classList.add('active');
-    }
-
-    function addLog(who, text) {
-        const log = document.getElementById('ai-log');
-        log.innerHTML += `<div class="${who === 'AI' ? 'bot' : 'user'}"><b>${who}:</b> ${text}</div>`;
-        log.scrollTop = log.scrollHeight;
-    }
-
-    async function dolphinNeuralAudit(input) {
-        const file = input.files[0];
-        if (!file) return;
-        go('ai');
-        addLog('AI', `Initiating Neural Audit for: ${file.name}...`);
-        
-        try {
-            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    model: "local-model",
-                    messages: [{role: "user", content: `Audit this file: ${file.name}. Is it safe? Respond VERDICT: SAFE or VERDICT: DANGER.`}],
-                    temperature: 0.1
-                })
-            });
-            const data = await res.json();
-            const verdict = data.choices[0].message.content;
-            addLog('AI', verdict);
-
-            if (verdict.includes("SAFE")) {
-                const formData = new FormData();
-                formData.append('file', file);
-                await fetch('http://127.0.0.1:5000/receive', { method: 'POST', body: formData });
-                addLog('AI', `✅ Success. ${file.name} published to Store.`);
-                
-                // ADD TO STORE GRID
-                const grid = document.getElementById('main-app-grid');
-                const newApp = document.createElement('div');
-                newApp.className = 'app-item';
-                newApp.onclick = () => showAppDetails(file.name);
-                newApp.innerHTML = `<div class="app-icon">📦</div><div class="app-name">${file.name}</div>`;
-                grid.appendChild(newApp);
-            }
-        } catch (e) { addLog('AI', "Audit Bridge Offline."); }
-    }
-
-    async function talk() {
-        const i = document.getElementById('ai-in');
-        if (!i.value) return;
-        addLog('You', i.value);
-        const userMsg = i.value;
-        i.value = "";
-        try {
-            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ model: "local-model", messages: [{role: "user", content: userMsg}] })
-            });
-            const data = await res.json();
-            addLog('AI', data.choices[0].message.content);
-        } catch (e) { addLog('AI', 'Connection Error.'); }
-    }
-
-    function showAppDetails(name) {
-        document.getElementById('active-app-title').innerText = name;
-        document.getElementById('comment-list').innerHTML = `<div class="comment-box"><b>System:</b> Displaying logs for ${name}</div>`;
-        rate(0);
-    }
-
-    function postComment() {
-        const val = document.getElementById('comm-in').value;
-        if (val) {
-            document.getElementById('comment-list').innerHTML += `<div class="comment-box"><b>${currentUser}:</b> ${val}</div>`;
-            document.getElementById('comm-in').value = "";
-        }
-    }
-
-    function rate(n) {
-        const stars = document.getElementById('star-row').children;
-        for(let i=0; i<5; i++) stars[i].style.color = i < n ? '#fbbc04' : '#444';
-    }
-
-    function updateProfile() {
-        const name = document.getElementById('name-input').value;
-        if (name) {
-            currentUser = name;
-            document.getElementById('display-name').innerText = "User: " + name;
-            alert("Username Saved");
-        }
-    }
-
-    function clearAI() { document.getElementById('ai-log').innerHTML = '<div class="bot"><b>AI:</b> Logs purged.</div>'; }
-</script>
-</body>
-</html>
+    let currentAppFile =
