@@ -3,32 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Persistent Repository</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Play Dark | Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --bg-body: #050505; --bg-nav: #121212; --bg-card: #1e1e1e;
-            --accent: #3d5afe; --text-main: #e0e0e0; --text-dim: #9e9e9e;
-            --sidebar-w: 260px; --ai-panel-w: 360px;
+        body { 
+            margin: 0; padding: 20px;
+            font-family: 'Inter', sans-serif; 
+            background-color: #050505; color: #e0e0e0;
+            display: flex; flex-direction: column; align-items: center;
         }
-        body { margin: 0; font-family: 'Inter', sans-serif; background: var(--bg-body); color: var(--text-main); display: flex; height: 100vh; overflow: hidden; }
+        .container { width: 100%; max-width: 500px; }
+        .logo { font-size: 1.5rem; font-weight: 800; color: #3d5afe; text-align: center; margin-bottom: 30px; }
         
-        /* Navigation Sidebar */
-        nav { width: var(--sidebar-w); background: var(--bg-nav); border-right: 1px solid #222; display: flex; flex-direction: column; padding: 25px 15px; flex-shrink: 0; }
-        .logo { font-size: 1.4rem; font-weight: 800; color: var(--accent); margin-bottom: 40px; padding-left: 15px; }
-        .nav-link { color: var(--text-dim); text-decoration: none; padding: 14px 15px; border-radius: 12px; margin-bottom: 5px; font-weight: 500; display: flex; align-items: center; gap: 12px; }
-        .nav-link.active { background: #252525; color: var(--accent); }
-        .btn-open-upload { width: 100%; padding: 15px; background: #252525; border: 1px dashed var(--accent); color: var(--accent); border-radius: 12px; cursor: pointer; font-weight: 600; margin-top: auto; }
+        /* App Card */
+        .app-card { 
+            background: #1e1e1e; padding: 25px; border-radius: 20px; 
+            border: 1px solid #333; text-align: center; margin-bottom: 20px;
+        }
+        .verified-tag { color: #00e676; font-size: 0.75rem; font-weight: 700; margin-bottom: 10px; }
+        .download-btn { 
+            display: block; margin-top: 15px; padding: 15px; 
+            background: #3d5afe; color: white; text-decoration: none; 
+            border-radius: 12px; font-weight: 700;
+        }
 
-        /* Main Content */
-        main { flex-grow: 1; padding: 40px; overflow-y: auto; }
-        .app-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 25px; }
-        .app-card { background: var(--bg-card); border-radius: 20px; padding: 20px; border: 1px solid #333; position: relative; }
-        .verified-tag { color: #00e676; font-size: 0.7rem; font-weight: 700; margin-bottom: 10px; display: flex; align-items: center; gap: 5px; }
-        .app-icon { width: 50px; height: 50px; background: #333; border-radius: 12px; display: flex; align-items: center; justify-content: center; margin-bottom: 10px; font-size: 1.5rem; }
-        .download-btn { width: 100%; padding: 12px; background: var(--accent); color: white; border: none; border-radius: 8px; font-weight: 700; cursor: pointer; text-align: center; display: block; text-decoration: none; margin-top: 10px; }
+        /* AI Chat Box */
+        .ai-box { 
+            background: #121212; border: 1px solid #222; 
+            border-radius: 20px; padding: 15px; width: 100%; box-sizing: border-box;
+        }
+        .ai-header { color: #3d5afe; font-weight: 700; font-size: 0.9rem; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .status-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; }
+        #chat-window { height: 150px; overflow-y: auto; font-size: 0.85rem; color: #9e9e9e; margin-bottom: 10px; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        #ai-input { 
+            width: 100%; background: #222; border: 1px solid #333; 
+            padding: 10px; border-radius: 10px; color: white; outline: none; box-sizing: border-box;
+        }
+        .msg-ai { color: #3d5afe; margin-bottom: 5px; }
+        .msg-user { color: #e0e0e0; margin-bottom: 5px; text-align: right; }
+    </style>
+</head>
+<body>
 
-        /* AI Panel */
-        aside { width: var(--ai-panel-w); background: var(--bg-nav); border-left: 1px solid #222; display: flex; flex-direction: column; flex-shrink: 0; }
-        .ai-header { padding: 20px; border-bottom: 1px solid #222; font-weight: 700; color: var(--accent); display: flex; align-items: center; gap: 10px; }
-        .status-dot { width: 8px; height: 8px; background: #00e676; border-radius: 50%; box-shadow:
+    <div class="container">
+        <div class="logo">🌑 PLAY DARK</div>
+
+        <div class="app-card">
+            <div class="verified-tag">🛡️ AI VERIFIED SECURE</div>
+            <h2 style="margin:0;">Nexus VPN</h2>
+            <p style="color: #999; font-size: 0.8rem;">Build: Stable | Size: 5.52 MB</p>
+            
+            <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="download-btn">
+                Download APK
+            </a>
+        </div>
+
+        <div class="ai-box">
+            <div class="ai-header"><div class="status-dot"></div> AI ASSISTANT</div>
+            <div id="chat-window">
+                <div class="msg-ai"><strong>AI:</strong> Welcome. Connection to DevMike86/The-Underground-Store is stable. 5.52MB file detected.</div>
+            </div>
+            <input type="text" id="ai-input" placeholder="Ask Assistant..." onkeypress="handleChat(event)">
+        </div>
+    </div>
+
+    <script>
+        function handleChat(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('ai-input');
+                const win = document.getElementById('chat-window');
+                if(!input.value) return;
+                
+                win.innerHTML += `<div class="msg-user"><strong>You:</strong> ${input.value}</div>`;
+                const text = input.value.toLowerCase();
+                input.value = '';
+                
+                setTimeout(() => {
+                    let reply = "Path verified. Tap the blue button to pull the 5.52MB package.";
+                    if(text.includes("hello")) reply = "Assistant online. Systems nominal.";
+                    win.innerHTML += `<div class="msg-ai"><strong>AI:</strong> ${reply}</div>`;
+                    win.scrollTop = win.scrollHeight;
+                }, 500);
+            }
+        }
+    </script>
+</body>
+</html>
