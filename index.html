@@ -35,6 +35,10 @@
         /* UI Components */
         .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
         .btn { background: var(--blue); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        
+        /* Scaled Download Button */
+        .btn-dl { background: var(--green); color: #000; border: none; padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: bold; cursor: pointer; margin-bottom: 15px; display: inline-block; }
+        
         input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
         
         /* Interactive Elements */
@@ -61,8 +65,10 @@
 
         <div id="app-details-area">
             <div class="card">
-                <h3 id="active-app-title">Nexus VPN v1.0</h3>
-                <button class="btn" id="dl-btn" style="background: var(--green); margin-bottom: 15px;" onclick="downloadApp()">DOWNLOAD NOW</button>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                    <h3 id="active-app-title" style="margin-top: 0;">Nexus VPN v1.0</h3>
+                    <button class="btn-dl" id="dl-btn" onclick="downloadApp()">INSTALL</button>
+                </div>
                 
                 <div class="stars" id="star-row">
                     <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
@@ -95,34 +101,4 @@
         <div class="card">
             <h3>Neural Scanner Upload</h3>
             <p style="font-size: 12px; color: var(--gray);">Audited files will appear on your App Page.</p>
-            <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
-            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & PUBLISH</button>
-        </div>
-    </div>
-
-    <div id="v-settings" class="view">
-        <h2 class="section-title">Settings</h2>
-        <div class="card">
-            <label style="font-size: 12px; color: var(--blue);">DISPLAY NAME</label>
-            <input type="text" id="name-input" placeholder="New Username">
-            <button class="btn" onclick="updateProfile()">Save Changes</button>
-        </div>
-        <div class="card">
-            <div style="display:flex; justify-content:space-between; align-items:center;">
-                <span>Auto-update over Wi-Fi</span>
-                <input type="checkbox" checked style="width:20px; margin:0;">
-            </div>
-        </div>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active" onclick="go('store')"><span class="nav-icon">🛍️</span>Apps</div>
-        <div class="nav-item" onclick="go('ai')"><span class="nav-icon">🤖</span>AI Chat</div>
-        <div class="nav-item" onclick="go('admin')"><span class="nav-icon">🛠️</span>Admin</div>
-        <div class="nav-item" onclick="go('settings')"><span class="nav-icon">⚙️</span>Settings</div>
-    </div>
-
-<script>
-    const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
-    let currentUser = "DevMike86";
-    let currentAppFile =
+            <input
