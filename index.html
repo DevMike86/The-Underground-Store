@@ -3,18 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Play Dark | Community Edition</title>
+    <title>Play Dark | Total Nexus</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --gp-dark: #202124; --gp-card: #303134; --gp-blue: #8ab4f8;
             --gp-text: #e8eaed; --gp-dim: #9aa0a6; --gp-green: #00e676;
         }
-        body { margin: 0; padding-bottom: 140px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
+        body { margin: 0; padding-bottom: 160px; font-family: 'Roboto', sans-serif; background-color: var(--gp-dark); color: var(--gp-text); }
         
-        /* Navigation Header */
-        header { padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--gp-dark); z-index: 10; }
-        .search-bar { background: var(--gp-card); border-radius: 24px; padding: 8px 20px; width: 60%; color: var(--gp-dim); font-size: 0.8rem; }
+        header { padding: 15px; border-bottom: 1px solid #3c4043; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: var(--gp-dark); z-index: 100; }
         #avatar { width: 35px; height: 35px; background: var(--gp-blue); border-radius: 50%; color: #202124; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
 
         .tabs { display: flex; justify-content: space-around; padding: 10px 0; border-bottom: 1px solid #3c4043; background: var(--gp-dark); }
@@ -24,41 +22,36 @@
         .view { display: none; padding: 20px; }
         .view.active { display: block; }
 
-        /* Enhanced App Card */
+        /* Store Layout */
         .app-container { background: var(--gp-card); border-radius: 20px; padding: 20px; max-width: 400px; margin: 0 auto; border: 1px solid #444; }
-        .app-header { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
-        .app-icon-large { width: 80px; height: 80px; background: #202124; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; border: 1px solid #444; }
-        .app-info h2 { margin: 0; font-size: 1.4rem; }
-        .app-info p { margin: 5px 0; color: var(--gp-green); font-size: 0.85rem; font-weight: bold; }
+        .app-header { display: flex; gap: 15px; align-items: center; margin-bottom: 15px; }
+        .app-icon { width: 70px; height: 70px; background: #202124; border-radius: 15px; display: flex; align-items: center; justify-content: center; font-size: 2rem; border: 1px solid #444; }
         
-        .dl-btn { background: var(--gp-blue); color: #202124; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; margin-bottom: 20px; }
+        .dl-btn { background: var(--gp-blue); color: #202124; text-decoration: none; display: block; text-align: center; padding: 12px; border-radius: 8px; font-weight: 700; margin: 15px 0; }
 
-        /* Rating & Comments */
-        .reviews { border-top: 1px solid #444; padding-top: 20px; }
-        .stars { color: #fbbc04; font-size: 1.2rem; margin-bottom: 10px; }
-        .comment-box { background: #171717; border-radius: 10px; padding: 10px; margin-bottom: 10px; }
-        .comment-box small { color: var(--gp-blue); }
-        .comment-input { width: 100%; background: #202124; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; box-sizing: border-box; margin-top: 10px; }
+        /* Comments */
+        .comment-box { background: #171717; border-radius: 8px; padding: 10px; margin-top: 10px; font-size: 0.85rem; }
+        .comment-input { width: 100%; background: #202124; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; margin-top: 10px; box-sizing: border-box; }
 
-        /* Standard Admin/Settings Inputs */
-        input[type="password"], input[type="text"], input[type="file"] { width: 100%; padding: 12px; margin-top: 10px; background: #171717; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
+        /* Forms */
+        input[type="password"], input[type="text"] { width: 100%; padding: 12px; margin-top: 10px; background: #171717; border: 1px solid #444; color: white; border-radius: 8px; box-sizing: border-box; }
         .btn { width: 100%; padding: 12px; background: var(--gp-blue); color: #202124; border: none; border-radius: 8px; font-weight: 700; margin-top: 15px; cursor: pointer; }
 
-        /* AI Dock */
-        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; }
-        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 10px; height: 30px; overflow: hidden; }
+        /* AI Dock - Fixed Positioning */
+        .ai-dock { position: fixed; bottom: 0; width: 100%; background: #121212; border-top: 1px solid #3c4043; padding: 15px; box-sizing: border-box; z-index: 200; }
+        #chat-log { font-size: 0.8rem; color: var(--gp-blue); margin-bottom: 8px; height: 40px; overflow-y: auto; }
         .ai-input-row { display: flex; gap: 10px; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="search-bar">Search Nexus Community</div>
+        <div style="background: var(--gp-card); border-radius: 20px; padding: 5px 15px; width: 60%; font-size: 0.8rem; color: var(--gp-dim);">Search Play Dark</div>
         <div id="avatar" onclick="switchTab('settings')">D</div>
     </header>
 
     <div class="tabs">
-        <div class="tab active" id="t-store" onclick="switchTab('store')">Nexus VPN</div>
+        <div class="tab active" id="t-store" onclick="switchTab('store')">Store</div>
         <div class="tab" id="t-admin" onclick="switchTab('admin')">Admin</div>
         <div class="tab" id="t-settings" onclick="switchTab('settings')">Settings</div>
     </div>
@@ -66,29 +59,115 @@
     <div id="v-store" class="view active">
         <div class="app-container">
             <div class="app-header">
-                <div class="app-icon-large">📡</div>
-                <div class="app-info">
-                    <h2>Nexus VPN</h2>
-                    <p>Verified Secure • 5.52 MB</p>
-                    <div style="font-size: 0.8rem; color: var(--gp-dim);">v1.0 Stable Build</div>
+                <div class="app-icon">📡</div>
+                <div>
+                    <h2 style="margin:0; font-size: 1.2rem;">Nexus VPN</h2>
+                    <div style="color: var(--gp-green); font-size: 0.8rem; font-weight: bold;">5.52 MB • v1.0 Stable</div>
                 </div>
             </div>
-
             <a href="https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk" class="dl-btn">Download APK</a>
-
-            <div class="reviews">
-                <div style="font-weight: bold; margin-bottom: 10px;">Ratings & Reviews</div>
-                <div class="stars">★★★★★ 5.0</div>
-                <div id="comment-list">
-                    <div class="comment-box">
-                        <small>DevMike86</small>
-                        <div style="font-size: 0.85rem;">Works perfectly. 5.52MB verified.</div>
-                    </div>
-                </div>
-                <input type="text" id="user-comment" class="comment-input" placeholder="Add a comment..." onkeypress="if(event.key==='Enter') addComment()">
+            
+            <div style="font-weight: bold; font-size: 0.9rem; margin-top: 20px;">Reviews ★★★★★</div>
+            <div id="comment-list">
+                <div class="comment-box"><b style="color: var(--gp-blue);">DevMike86:</b> Build 5.52MB verified and active.</div>
             </div>
+            <input type="text" id="user-comment" class="comment-input" placeholder="Write a review..." onkeypress="if(event.key==='Enter') addComment()">
         </div>
     </div>
 
     <div id="v-admin" class="view">
         <div id="admin-lock">
+            <h3>Admin PIN Required</h3>
+            <input type="password" id="pin" placeholder="Enter PIN">
+            <button class="btn" onclick="checkPin()">Unlock Terminal</button>
+        </div>
+        <div id="admin-panel" style="display:none;">
+            <h3>AI Malware Scan Uploader</h3>
+            <input type="text" id="new-name" placeholder="App Name">
+            <input type="file" id="new-file" style="margin-top:10px; width:100%;">
+            <div id="scan-notif" style="display:none; color: var(--gp-blue); font-family: monospace; margin-top: 10px;">> AI INITIALIZING SCAN...</div>
+            <button class="btn" onclick="runScan()">Scan & Push</button>
+        </div>
+    </div>
+
+    <div id="v-settings" class="view">
+        <h3>User Settings</h3>
+        <input type="text" id="new-user" placeholder="Change Display Name">
+        <button class="btn" onclick="changeName()">Update Profile</button>
+    </div>
+
+    <div class="ai-dock">
+        <div id="chat-log"><strong>AI:</strong> Assistant Online. DevMike86 Repository connected.</div>
+        <div class="ai-input-row">
+            <input type="text" id="ai-in" placeholder="Command AI..." onkeypress="if(event.key==='Enter') doChat()" style="flex-grow:1; background:#202124; border:1px solid #444; padding:10px; border-radius:8px; color:white;">
+            <button onclick="document.getElementById('chat-log').innerHTML='<strong>AI:</strong> Ready.';" style="background:#333; color:white; border:none; border-radius:8px; padding:0 10px; cursor:pointer;">Clear</button>
+        </div>
+    </div>
+
+    <script>
+        // TAB LOGIC
+        function switchTab(target) {
+            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('v-' + target).classList.add('active');
+            document.getElementById('t-' + target).classList.add('active');
+        }
+
+        // ADMIN LOGIC
+        function checkPin() {
+            if (document.getElementById('pin').value === "1973") {
+                document.getElementById('admin-lock').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                msg("AI: Admin Access Granted.");
+            } else {
+                msg("AI: Access Denied. PIN Incorrect.");
+            }
+        }
+
+        // SCAN LOGIC
+        function runScan() {
+            const name = document.getElementById('new-name').value;
+            if(!name) return;
+            document.getElementById('scan-notif').style.display = 'block';
+            msg("AI: Analyzing binary signatures...");
+            setTimeout(() => {
+                document.getElementById('scan-notif').style.display = 'none';
+                msg("AI: Scan Complete. " + name + " verified.");
+                switchTab('store');
+            }, 2000);
+        }
+
+        // SETTINGS LOGIC
+        function changeName() {
+            const name = document.getElementById('new-user').value;
+            if(name) {
+                document.getElementById('avatar').innerText = name.charAt(0).toUpperCase();
+                msg("AI: Profile updated to " + name);
+            }
+        }
+
+        // AI LOGIC
+        function doChat() {
+            const i = document.getElementById('ai-in');
+            msg("You: " + i.value);
+            const val = i.value.toLowerCase();
+            i.value = '';
+            if(val.includes("nexus")) setTimeout(() => msg("AI: Nexus VPN is the current active package (5.52MB)."), 500);
+        }
+
+        function msg(m) {
+            const log = document.getElementById('chat-log');
+            log.innerHTML = m;
+            log.scrollTop = log.scrollHeight;
+        }
+
+        function addComment() {
+            const input = document.getElementById('user-comment');
+            if(!input.value) return;
+            const user = document.getElementById('avatar').innerText;
+            document.getElementById('comment-list').innerHTML += `<div class="comment-box"><b style="color:var(--gp-blue);">User ${user}:</b> ${input.value}</div>`;
+            input.value = '';
+        }
+    </script>
+</body>
+</html>
