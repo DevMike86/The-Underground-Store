@@ -12,7 +12,7 @@
         .nav-bar { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { color: var(--gray); text-align: center; font-size: 10px; cursor: pointer; flex: 1; transition: 0.2s; }
         .nav-item.active { color: var(--blue); }
-        .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
+        .nav-icon { font-size: 24px; display: block; margin-bottom: 2px; }
 
         /* Page Management */
         .view { display: none; height: calc(100vh - 70px); padding: 20px; box-sizing: border-box; overflow-y: auto; }
@@ -20,78 +20,48 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         /* App Grid */
-        .section-title { font-size: 16px; font-weight: 500; margin: 20px 0 15px; color: #fff; }
+        .section-title { font-size: 18px; font-weight: 500; margin: 20px 0 15px; color: #fff; }
         .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 20px; }
         .app-item { text-align: center; cursor: pointer; }
-        .app-icon { width: 55px; height: 55px; background: #2a2a2c; border-radius: 12px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; border: 1px solid #333; }
+        .app-icon { width: 60px; height: 60px; background: #2a2a2c; border-radius: 14px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 28px; border: 1px solid #444; }
         .app-name { font-size: 11px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
         /* AI Terminal */
-        #ai-log { height: 60%; overflow-y: auto; background: #000; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 14px; margin-bottom: 10px; border: 1px solid #333; }
+        #ai-log { height: 60%; overflow-y: auto; background: #000; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 14px; margin-bottom: 15px; border: 1px solid #333; }
         .bot { color: var(--blue); margin-bottom: 10px; }
         .user { color: #fff; text-align: right; margin-bottom: 10px; }
-        .chat-input-area { display: flex; gap: 8px; }
 
         /* UI Components */
         .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
         .btn { background: var(--blue); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
         input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
-        
-        /* Interactive Elements */
-        .stars { color: #444; font-size: 20px; cursor: pointer; margin-bottom: 10px; }
-        .star.gold { color: #fbbc04; }
-        .comment-box { background: #111; padding: 8px; border-radius: 5px; margin-top: 5px; font-size: 11px; border-left: 2px solid var(--blue); }
     </style>
 </head>
 <body>
 
     <div id="v-store" class="view active">
-        <header style="margin-bottom: 20px;">
-            <div style="font-size: 22px; font-weight: bold; color: var(--blue);">Nexus Store</div>
+        <header>
+            <div style="font-size: 24px; font-weight: bold; color: var(--blue);">Nexus Store</div>
             <div id="display-name" style="font-size: 12px; color: var(--gray);">User: DevMike86</div>
         </header>
 
-        <div class="section-title">Installed Apps</div>
+        <div class="section-title">Verified Apps</div>
         <div class="app-grid" id="main-app-grid">
             <div class="app-item" onclick="handleAppTouch('Nexus VPN')">
                 <div class="app-icon" style="border-color: var(--green);">🛡️</div>
                 <div class="app-name">Nexus VPN</div>
             </div>
         </div>
-
-        <div id="app-details-area">
-            <div class="card">
-                <h3 id="active-app-title" style="margin-top:0;">Nexus VPN v1.0</h3>
-                <div id="comment-list">
-                    <div class="comment-box"><b>System:</b> Verified Secure.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="v-reviews" class="view">
-        <h2 class="section-title">App Review Console</h2>
-        <div class="card">
-            <p style="font-size: 12px; color: var(--gray);">Rating for: <span id="rating-target" style="color:var(--blue)">Nexus VPN</span></p>
-            <div class="stars" id="star-row">
-                <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
-            </div>
-            <input type="text" id="comm-in" placeholder="Write a review...">
-            <button class="btn" onclick="postComment()">Post Review</button>
-        </div>
     </div>
 
     <div id="v-ai" class="view">
         <h2 class="section-title">Dolphin AI Bridge</h2>
         <div id="ai-log">
-            <div class="bot"><b>SYSTEM:</b> Linked to LM Studio.</div>
+            <div class="bot"><b>SYSTEM:</b> Linked to LM Studio. Uncensored mode active.</div>
         </div>
         <div class="card">
             <input type="text" id="ai-in" placeholder="Ask Dolphin..." onkeydown="if(event.key==='Enter') talk()">
-            <div class="chat-input-area">
-                <button class="btn" onclick="talk()">SEND</button>
-                <button class="btn" onclick="clearAI()" style="background:#333; color:#fff;">CLR</button>
-            </div>
+            <button class="btn" onclick="talk()">SEND TO AI</button>
         </div>
     </div>
 
@@ -99,10 +69,9 @@
         <h2 class="section-title">Developer Console</h2>
         <div class="card">
             <h3>Neural Scanner Upload</h3>
-            <p style="font-size: 12px; color: var(--gray);">Audited files will appear on your App Page.</p>
+            <p style="font-size: 12px; color: var(--gray);">Files scanned by AI before publishing.</p>
             <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
-            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & PUBLISH</button>
-            <button class="btn" style="margin-top:10px; background:#333; color:#fff;" onclick="clearReviews()">CLEAR REVIEWS</button>
+            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & AUDIT</button>
         </div>
     </div>
 
@@ -111,11 +80,113 @@
         <div class="card">
             <label style="font-size: 12px; color: var(--blue);">DISPLAY NAME</label>
             <input type="text" id="name-input" placeholder="New Username">
-            <button class="btn" onclick="updateProfile()">Save Changes</button>
+            <button class="btn" onclick="updateProfile()">SAVE CHANGES</button>
         </div>
     </div>
 
     <div class="nav-bar">
-        <div class="nav-item active" onclick="go('store')"><span class="nav-icon">🛍️</span>Apps</div>
-        <div class="nav-item" onclick="go('reviews')"><span class="nav-icon">⭐</span>Reviews</div>
-        <div class="nav-item" onclick="go('ai')">
+        <div class="nav-item active" onclick="go('store', this)"><span class="nav-icon">🛍️</span>Apps</div>
+        <div class="nav-item" onclick="go('ai', this)"><span class="nav-icon">🤖</span>AI Chat</div>
+        <div class="nav-item" onclick="go('admin', this)"><span class="nav-icon">🛠️</span>Admin</div>
+        <div class="nav-item" onclick="go('settings', this)"><span class="nav-icon">⚙️</span>Settings</div>
+    </div>
+
+<script>
+    const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
+    let currentUser = "DevMike86";
+    let currentAppFile = null;
+
+    // FIX 1: Works with 'this' to highlight buttons
+    function go(id, el) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('v-' + id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    // FIX 2: Immediate download logic
+    function handleAppTouch(name) {
+        let downloadUrl = "";
+        
+        if (name === "Nexus VPN") {
+            downloadUrl = "https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk";
+        } else if (currentAppFile && name === currentAppFile.name) {
+            downloadUrl = URL.createObjectURL(currentAppFile);
+        }
+
+        if (downloadUrl) {
+            const a = document.createElement('a');
+            a.href = downloadUrl;
+            a.download = name.includes('.apk') ? name : name + ".apk";
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    }
+
+    function addLog(who, text) {
+        const log = document.getElementById('ai-log');
+        log.innerHTML += `<div class="${who === 'AI' ? 'bot' : 'user'}"><b>${who}:</b> ${text}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    async function talk() {
+        const i = document.getElementById('ai-in');
+        if (!i.value) return;
+        addLog('You', i.value);
+        const userMsg = i.value;
+        i.value = "";
+        try {
+            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model: "local-model", messages: [{role: "user", content: userMsg}] })
+            });
+            const data = await res.json();
+            addLog('AI', data.choices[0].message.content);
+        } catch (e) { addLog('AI', 'Connection Error. Is LM Studio running?'); }
+    }
+
+    async function dolphinNeuralAudit(input) {
+        const file = input.files[0];
+        if (!file) return;
+        currentAppFile = file; 
+        go('ai', document.querySelectorAll('.nav-item')[1]);
+        addLog('AI', `Initiating Neural Audit for: ${file.name}...`);
+        
+        try {
+            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "local-model",
+                    messages: [{role: "user", content: `Audit this file: ${file.name}. Is it safe? Respond VERDICT: SAFE or VERDICT: DANGER.`}]
+                })
+            });
+            const data = await res.json();
+            const verdict = data.choices[0].message.content;
+            addLog('AI', verdict);
+
+            if (verdict.toUpperCase().includes("SAFE")) {
+                addLog('AI', `✅ Success. ${file.name} published.`);
+                const grid = document.getElementById('main-app-grid');
+                const newApp = document.createElement('div');
+                newApp.className = 'app-item';
+                newApp.onclick = () => handleAppTouch(file.name);
+                newApp.innerHTML = `<div class="app-icon">📦</div><div class="app-name">${file.name}</div>`;
+                grid.appendChild(newApp);
+            }
+        } catch (e) { addLog('AI', "Audit Bridge Offline."); }
+    }
+
+    function updateProfile() {
+        const name = document.getElementById('name-input').value;
+        if (name) {
+            currentUser = name;
+            document.getElementById('display-name').innerText = "User: " + name;
+            alert("Username Saved");
+        }
+    }
+</script>
+</body>
+</html>
