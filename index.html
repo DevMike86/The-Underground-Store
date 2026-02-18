@@ -3,76 +3,202 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus OS | Neural Audit Build</title>
+    <title>Nexus OS | Neural Market</title>
     <style>
-        :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --green: #00e676; --bg: #050505; --red: #ff5252; --orange: #ffa726; }
-        body { background: var(--bg); color: #e8eaed; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow: hidden; height: 100vh; }
+        :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --green: #00e676; --bg: #050505; --red: #ff5252; --gray: #9aa0a6; }
+        body { background: var(--bg); color: #e8eaed; font-family: 'Roboto', sans-serif; margin: 0; overflow: hidden; height: 100vh; }
 
-        /* Global Header */
-        header { padding: 15px 20px; background: var(--card); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-align: center; }
+        /* Navigation Bar (Play Store Style) */
+        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 70px; background: var(--card); border-top: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
+        .nav-item { color: var(--gray); text-align: center; font-size: 10px; cursor: pointer; flex: 1; transition: 0.2s; }
+        .nav-item.active { color: var(--blue); }
+        .nav-icon { font-size: 20px; display: block; margin-bottom: 2px; }
 
-        /* View Management */
-        .page-container { height: calc(100vh - 130px); overflow-y: auto; position: relative; }
-        .view { display: none; height: 100%; padding: 20px; box-sizing: border-box; }
-        .view.active { display: flex; flex-direction: column; animation: fadeIn 0.2s ease; }
+        /* Page Management */
+        .view { display: none; height: calc(100vh - 70px); padding: 20px; box-sizing: border-box; overflow-y: auto; }
+        .view.active { display: block; animation: fadeIn 0.3s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Market Style Grid */
-        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        /* App Grid (Resized to Play Store scale) */
+        .section-title { font-size: 16px; font-weight: 500; margin: 20px 0 15px; color: #fff; }
+        .app-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; }
         .app-item { text-align: center; cursor: pointer; }
-        .app-icon { width: 60px; height: 60px; background: #1c1c1e; border-radius: 15px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid #333; }
-        .app-name { font-size: 11px; font-weight: 500; color: #fff; }
+        .app-icon { width: 55px; height: 55px; background: #2a2a2c; border-radius: 12px; margin: 0 auto 5px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
+        .app-name { font-size: 11px; color: var(--gray); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-        /* Navigation Bar */
-        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--card); border-top: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
-        .nav-item { color: #666; text-align: center; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.3s; }
-        .nav-item.active { color: var(--blue); background: rgba(138, 180, 248, 0.08); border-top: 3px solid var(--blue); }
-        .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
+        /* AI Chat Terminal */
+        #ai-log { height: 60%; overflow-y: auto; background: #000; border-radius: 10px; padding: 15px; font-family: monospace; font-size: 14px; margin-bottom: 10px; border: 1px solid #333; }
+        .bot { color: var(--blue); margin-bottom: 10px; }
+        .user { color: #fff; text-align: right; margin-bottom: 10px; }
+        .chat-input-area { display: flex; gap: 8px; }
 
-        /* UI Components */
-        .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
-        .btn { background: var(--blue); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; width: 100%; transition: 0.2s; }
-        input, textarea { width: 100%; padding: 16px; background: #111; border: 1px solid #444; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 12px; outline: none; }
+        /* UI Elements */
+        .card { background: var(--card); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid #333; }
+        .btn { background: var(--blue); color: #000; border: none; padding: 12px; border-radius: 8px; font-weight: bold; width: 100%; cursor: pointer; }
+        input { width: 100%; padding: 12px; background: #111; border: 1px solid #333; color: #fff; border-radius: 8px; margin-bottom: 10px; box-sizing: border-box; }
         
-        /* Comments Section */
-        #comment-list { margin: 10px 0; max-height: 150px; overflow-y: auto; }
-        .comment-box { background: #000; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; border-left: 2px solid var(--blue); }
-
-        /* AI Terminal */
-        #ai-log { flex: 1; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 15px; padding: 10px; }
-        .bot { color: var(--blue); margin-bottom: 15px; border-left: 3px solid var(--blue); padding-left: 12px; }
-        .bot.threat { color: var(--red); border-left-color: var(--red); background: rgba(255, 82, 82, 0.1); padding: 10px; border-radius: 0 8px 8px 0; }
-        .user { color: #fff; margin-bottom: 15px; text-align: right; }
-        .stars { font-size: 28px; color: #222; display: flex; gap: 8px; margin: 10px 0; }
+        /* Comments & Stars */
+        .stars { color: #444; font-size: 20px; cursor: pointer; margin-bottom: 10px; }
         .star.gold { color: #fbbc04; }
+        .comment-box { background: #111; padding: 10px; border-radius: 5px; margin-top: 5px; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div style="font-weight:bold; color:var(--blue); letter-spacing: 1px;">NEXUS_CORE</div>
-        <div id="display-name" style="font-size: 14px; font-weight: bold;">DevMike86</div>
-    </header>
+    <div id="v-store" class="view active">
+        <header style="margin-bottom: 20px;">
+            <div style="font-size: 22px; font-weight: bold; color: var(--blue);">Nexus Store</div>
+            <div id="display-name" style="font-size: 12px; color: var(--gray);">User: DevMike86</div>
+        </header>
 
-    <div class="page-container">
-        <div id="v-store" class="view active">
-            <h2 style="margin:0 0 15px 0; font-size: 18px;">Marketplace</h2>
-            
-            <div class="app-grid">
-                <div class="app-item"><div class="app-icon" style="color:var(--green)">🛡️</div><div class="app-name">Nexus VPN</div></div>
-                <div class="app-item"><div class="app-icon" style="color:var(--blue)">📡</div><div class="app-name">Dolphin Proxy</div></div>
-                <div class="app-item"><div class="app-icon" style="color:var(--red)">☣️</div><div class="app-name">Root Access</div></div>
+        <div class="section-title">Recommended for you</div>
+        <div class="app-grid">
+            <div class="app-item"><div class="app-icon">🛡️</div><div class="app-name">VPN</div></div>
+            <div class="app-item"><div class="app-icon">📡</div><div class="app-name">Proxy</div></div>
+            <div class="app-item"><div class="app-icon">☣️</div><div class="app-name">Root</div></div>
+            <div class="app-item"><div class="app-icon">🛡️</div><div class="app-name">Audit</div></div>
+        </div>
+
+        <div class="card" style="margin-top:25px;">
+            <h3>App Reviews</h3>
+            <div class="stars" id="star-row">
+                <span onclick="rate(1)">★</span><span onclick="rate(2)">★</span><span onclick="rate(3)">★</span><span onclick="rate(4)">★</span><span onclick="rate(5)">★</span>
             </div>
+            <div id="comment-list"></div>
+            <input type="text" id="comm-in" placeholder="Add a comment...">
+            <button class="btn" onclick="postComment()">Post</button>
+        </div>
+    </div>
 
-            <div class="card">
-                <h3>Dolphin Neural Scanner</h3>
-                <p style="color:#888; font-size: 12px;">Upload an app. Uncensored AI will audit the code.</p>
-                <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
-                <button class="btn" onclick="document.getElementById('ai-upload').click()" style="background:var(--orange);">LOAD & SCAN APP</button>
+    <div id="v-ai" class="view">
+        <h2 class="section-title">Dolphin AI Bridge</h2>
+        <div id="ai-log">
+            <div class="bot"><b>SYSTEM:</b> Linked to LM Studio.</div>
+        </div>
+        <div class="card">
+            <input type="text" id="ai-in" placeholder="Message Dolphin..." onkeydown="if(event.key==='Enter') talk()">
+            <div class="chat-input-area">
+                <button class="btn" onclick="talk()">SEND</button>
+                <button class="btn" onclick="clearAI()" style="background:#333; color:#fff;">CLR</button>
             </div>
+        </div>
+    </div>
 
-            <div class="card">
-                <h3>Nexus VPN v1.0</h3>
-                <button class="btn" style="background:var(--green); margin-bottom:10px;" onclick="downloadAPK()">DOWNLOAD APK</button>
-                <div class="stars" id="star-row">
-                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span>
+    <div id="v-admin" class="view">
+        <h2 class="section-title">Developer Console</h2>
+        <div class="card">
+            <h3>Neural Scanner Upload</h3>
+            <p style="font-size: 12px; color: var(--gray);">Directly audit and deposit apps to C:/Nexus_Inbox</p>
+            <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
+            <button class="btn" style="background:var(--green);" onclick="document.getElementById('ai-upload').click()">UPLOAD & AUDIT</button>
+        </div>
+    </div>
+
+    <div id="v-settings" class="view">
+        <h2 class="section-title">Settings</h2>
+        <div class="card">
+            <label style="font-size: 12px; color: var(--blue);">USER PROFILE</label>
+            <input type="text" id="name-input" placeholder="Change Username">
+            <button class="btn" onclick="updateProfile()">Save Changes</button>
+        </div>
+        <div class="card">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span>Auto-update over Wi-Fi</span>
+                <input type="checkbox" checked style="width:20px;">
+            </div>
+        </div>
+    </div>
+
+    <div class="nav-bar">
+        <div class="nav-item active" onclick="go('store')"><span class="nav-icon">🛍️</span>Games</div>
+        <div class="nav-item" onclick="go('ai')"><span class="nav-icon">🤖</span>AI</div>
+        <div class="nav-item" onclick="go('admin')"><span class="nav-icon">🛠️</span>Admin</div>
+        <div class="nav-item" onclick="go('settings')"><span class="nav-icon">⚙️</span>Settings</div>
+    </div>
+
+<script>
+    const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
+
+    function go(id) {
+        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+        document.getElementById('v-' + id).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    function addLog(who, text) {
+        const log = document.getElementById('ai-log');
+        log.innerHTML += `<div class="${who === 'AI' ? 'bot' : 'user'}"><b>${who}:</b> ${text}</div>`;
+        log.scrollTop = log.scrollHeight;
+    }
+
+    async function dolphinNeuralAudit(input) {
+        const file = input.files[0];
+        if (!file) return;
+        go('ai');
+        addLog('AI', `Scanning ${file.name}...`);
+        
+        try {
+            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    model: "local-model",
+                    messages: [{role: "user", content: `Is file ${file.name} safe? Respond VERDICT: SAFE or VERDICT: DANGER.`}],
+                    temperature: 0.1
+                })
+            });
+            const data = await res.json();
+            const verdict = data.choices[0].message.content;
+            addLog('AI', verdict);
+
+            if (verdict.includes("SAFE")) {
+                const formData = new FormData();
+                formData.append('file', file);
+                await fetch('http://127.0.0.1:5000/receive', { method: 'POST', body: formData });
+                addLog('AI', "✅ Deposited to C:/Nexus_Inbox");
+            }
+        } catch (e) { addLog('AI', "Error connecting to AI or Python."); }
+    }
+
+    async function talk() {
+        const i = document.getElementById('ai-in');
+        const msg = i.value;
+        if (!msg) return;
+        addLog('You', msg); i.value = "";
+        try {
+            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ model: "local-model", messages: [{role: "user", content: msg}] })
+            });
+            const data = await res.json();
+            addLog('AI', data.choices[0].message.content);
+        } catch (e) { addLog('AI', 'AI Offline.'); }
+    }
+
+    function clearAI() { document.getElementById('ai-log').innerHTML = ''; }
+
+    function postComment() {
+        const val = document.getElementById('comm-in').value;
+        if (val) {
+            document.getElementById('comment-list').innerHTML += `<div class="comment-box"><b>User:</b> ${val}</div>`;
+            document.getElementById('comm-in').value = "";
+        }
+    }
+
+    function rate(n) {
+        const stars = document.getElementById('star-row').children;
+        for(let i=0; i<5; i++) stars[i].style.color = i < n ? '#fbbc04' : '#444';
+    }
+
+    function updateProfile() {
+        const name = document.getElementById('name-input').value;
+        if (name) {
+            document.getElementById('display-name').innerText = "User: " + name;
+            alert("Username Updated");
+        }
+    }
+</script>
+</body>
+</html>
