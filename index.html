@@ -3,16 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Nexus OS | Verified Build</title>
+    <title>Nexus OS | Neural Audit Build</title>
     <style>
-        :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --green: #00e676; --bg: #050505; --red: #ff5252; }
-        body { background: var(--bg); color: #e8eaed; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 0; overflow: hidden; height: 100vh; }
+        :root { --blue: #8ab4f8; --dark: #000; --card: #1c1c1e; --green: #00e676; --bg: #050505; --red: #ff5252; --orange: #ffa726; }
+        body { background: var(--bg); color: #e8eaed; font-family: -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; overflow: hidden; height: 100vh; }
 
         /* Global Header */
-        header { 
-            padding: 15px 20px; background: var(--card); border-bottom: 1px solid #333; 
-            display: flex; justify-content: space-between; align-items: center; 
-        }
+        header { padding: 15px 20px; background: var(--card); border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; }
 
         /* View Management */
         .page-container { height: calc(100vh - 130px); overflow-y: auto; position: relative; }
@@ -20,12 +17,14 @@
         .view.active { display: flex; flex-direction: column; animation: fadeIn 0.2s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
+        /* Market Style Grid */
+        .app-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-bottom: 25px; }
+        .app-item { text-align: center; cursor: pointer; }
+        .app-icon { width: 60px; height: 60px; background: #1c1c1e; border-radius: 15px; margin: 0 auto 8px; display: flex; align-items: center; justify-content: center; font-size: 26px; border: 1px solid #333; }
+        .app-name { font-size: 11px; font-weight: 500; color: #fff; }
+
         /* Navigation Bar */
-        .nav-bar { 
-            position: fixed; bottom: 0; width: 100%; height: 75px; 
-            background: var(--card); border-top: 1px solid #333; 
-            display: flex; justify-content: space-around; align-items: center; z-index: 1000;
-        }
+        .nav-bar { position: fixed; bottom: 0; width: 100%; height: 75px; background: var(--card); border-top: 1px solid #333; display: flex; justify-content: space-around; align-items: center; z-index: 1000; }
         .nav-item { color: #666; text-align: center; font-size: 11px; font-weight: bold; cursor: pointer; flex: 1; transition: 0.3s; }
         .nav-item.active { color: var(--blue); background: rgba(138, 180, 248, 0.08); border-top: 3px solid var(--blue); }
         .nav-icon { font-size: 22px; display: block; margin-bottom: 4px; }
@@ -33,19 +32,18 @@
         /* UI Components */
         .card { background: var(--card); border: 1px solid #333; padding: 20px; border-radius: 15px; margin-bottom: 15px; }
         .btn { background: var(--blue); color: #000; border: none; padding: 16px; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 14px; width: 100%; transition: 0.2s; }
-        .btn:active { transform: scale(0.98); opacity: 0.8; }
-        .btn-red { background: var(--red); color: #fff; }
+        input, textarea { width: 100%; padding: 16px; background: #111; border: 1px solid #444; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 12px; outline: none; }
         
-        input { width: 100%; padding: 16px; background: #111; border: 1px solid #444; color: #fff; border-radius: 10px; box-sizing: border-box; font-size: 16px; margin-bottom: 12px; outline: none; }
-        input:focus { border-color: var(--blue); }
+        /* Comments Section */
+        #comment-list { margin: 10px 0; max-height: 150px; overflow-y: auto; }
+        .comment-box { background: #000; padding: 10px; border-radius: 8px; margin-bottom: 8px; font-size: 12px; border-left: 2px solid var(--blue); }
 
-        /* AI Terminal Specifics */
+        /* AI Terminal */
         #ai-log { flex: 1; overflow-y: auto; font-family: 'Courier New', monospace; font-size: 15px; padding: 10px; }
         .bot { color: var(--blue); margin-bottom: 15px; border-left: 3px solid var(--blue); padding-left: 12px; }
+        .bot.threat { color: var(--red); border-left-color: var(--red); background: rgba(255, 82, 82, 0.1); padding: 10px; border-radius: 0 8px 8px 0; }
         .user { color: #fff; margin-bottom: 15px; text-align: right; }
-
-        /* Rating Stars */
-        .stars { font-size: 32px; color: #222; display: flex; gap: 8px; margin: 10px 0; }
+        .stars { font-size: 28px; color: #222; display: flex; gap: 8px; margin: 10px 0; }
         .star.gold { color: #fbbc04; }
     </style>
 </head>
@@ -58,20 +56,37 @@
 
     <div class="page-container">
         <div id="v-store" class="view active">
-            <h2 style="margin:0 0 15px 0;">Repositories</h2>
+            <h2 style="margin:0 0 15px 0; font-size: 18px;">Marketplace</h2>
+            
+            <div class="app-grid">
+                <div class="app-item"><div class="app-icon" style="color:var(--green)">🛡️</div><div class="app-name">Nexus VPN</div></div>
+                <div class="app-item"><div class="app-icon" style="color:var(--blue)">📡</div><div class="app-name">Dolphin Proxy</div></div>
+                <div class="app-item"><div class="app-icon" style="color:var(--red)">☣️</div><div class="app-name">Root Access</div></div>
+            </div>
+
+            <div class="card">
+                <h3>Dolphin Neural Scanner</h3>
+                <p style="color:#888; font-size: 12px;">Upload an app. Uncensored AI will audit the code.</p>
+                <input type="file" id="ai-upload" style="display:none" onchange="dolphinNeuralAudit(this)">
+                <button class="btn" onclick="document.getElementById('ai-upload').click()" style="background:var(--orange);">LOAD & SCAN APP</button>
+            </div>
+
             <div class="card">
                 <h3>Nexus VPN v1.0</h3>
-                <p style="color:#888; font-size: 14px;">Bypass ISP filters and encrypt local traffic.</p>
-                <button class="btn" style="background:var(--green);" onclick="downloadAPK()">DOWNLOAD APK</button>
+                <button class="btn" style="background:var(--green); margin-bottom:10px;" onclick="downloadAPK()">DOWNLOAD APK</button>
                 <div class="stars" id="star-row">
-                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span><span class="star" onclick="starRate(5)">★</span>
+                    <span class="star" onclick="rate(1)">★</span><span class="star" onclick="rate(2)">★</span><span class="star" onclick="rate(3)">★</span><span class="star" onclick="rate(4)">★</span><span class="star" onclick="rate(5)">★</span>
                 </div>
+                
+                <div id="comment-list"></div>
+                <input type="text" id="comm-in" placeholder="Write a review..." style="margin-top:10px;">
+                <button class="btn" style="background:#333; color:#fff;" onclick="postComment()">POST REVIEW</button>
             </div>
         </div>
 
         <div id="v-ai" class="view">
             <div id="ai-log">
-                <div class="bot"><b>SYSTEM:</b> Dolphin 2.9 Uncensored link active. Type command to begin.</div>
+                <div class="bot"><b>SYSTEM:</b> Dolphin 2.9 Uncensored Bridge Active.</div>
             </div>
             <div class="card" style="margin-bottom:0; background:#0a0a0a;">
                 <input type="text" id="ai-in" placeholder="Ask Dolphin..." onkeydown="if(event.key==='Enter') talk()">
@@ -85,142 +100,20 @@
         <div id="v-admin" class="view">
             <h2>Admin Terminal</h2>
             <div class="card" id="admin-lock">
-                <p style="text-align:center; color:#888;">PIN Required for Access</p>
-                <input type="password" id="pin-code" placeholder="Enter 4-Digit PIN">
-                <button class="btn" onclick="unlockAdmin()">UNLOCK SYSTEM</button>
+                <input type="password" id="pin-code" placeholder="Enter PIN">
+                <button class="btn" onclick="unlockAdmin()">UNLOCK</button>
             </div>
             <div id="admin-panel" style="display:none;">
                 <div class="card">
-                    <h3 style="color:var(--green)">✓ ACCESS GRANTED</h3>
-                    <button class="btn" onclick="adminAction('Scanning for malware...')">RUN SYSTEM AUDIT</button>
-                    <button class="btn" onclick="adminAction('Bypassing local firewall...')">FORCE BYPASS</button>
-                    <button class="btn btn-red" onclick="location.reload()">LOCK TERMINAL</button>
+                    <h3 style="color:var(--green)">✓ ADMIN AUTHENTICATED</h3>
+                    <button class="btn" onclick="adminAction('Scanning system logs...')">SYSTEM AUDIT</button>
+                    <button class="btn btn-red" style="margin-top:10px;" onclick="location.reload()">LOCK</button>
                 </div>
             </div>
         </div>
 
         <div id="v-settings" class="view">
-            <h2>Configuration</h2>
+            <h2>Settings</h2>
             <div class="card">
-                <label style="color:var(--blue); font-size:12px; display:block; margin-bottom:8px;">PROFILE USERNAME</label>
-                <input type="text" id="name-input" placeholder="Enter New Name">
-                <button class="btn" onclick="updateProfile()">SAVE SETTINGS</button>
-            </div>
-            <div class="card">
-                <label style="color:var(--blue); font-size:12px; display:block; margin-bottom:8px;">CONNECTION STATUS</label>
-                <p style="font-size:14px; margin: 5px 0;">Tunnel: <span style="color:var(--green)">Active</span></p>
-                <p style="font-size:11px; color:#555;">unadept-elocutionary-ling.ngrok-free.dev</p>
-                <button class="btn" style="background:#222; color:#fff;" onclick="alert('Connection Resetting...')">RESET TUNNEL</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="nav-bar">
-        <div class="nav-item active" id="n-store" onclick="go('store')">
-            <span class="nav-icon">📦</span>STORE
-        </div>
-        <div class="nav-item" id="n-ai" onclick="go('ai')">
-            <span class="nav-icon">💬</span>AI CHAT
-        </div>
-        <div class="nav-item" id="n-admin" onclick="go('admin')">
-            <span class="nav-icon">🔐</span>ADMIN
-        </div>
-        <div class="nav-item" id="n-settings" onclick="go('settings')">
-            <span class="nav-icon">⚙️</span>SETTINGS
-        </div>
-    </div>
-
-<script>
-    const TUNNEL = "https://unadept-elocutionary-ling.ngrok-free.dev";
-
-    // 1. NAVIGATION SYSTEM
-    function go(pageId) {
-        document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-        document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-        
-        document.getElementById('v-' + pageId).classList.add('active');
-        document.getElementById('n-' + pageId).classList.add('active');
-
-        if(pageId === 'ai') {
-            setTimeout(() => document.getElementById('ai-in').focus(), 150);
-        }
-    }
-
-    // 2. AI TERMINAL FUNCTIONS
-    function addLog(who, text) {
-        const log = document.getElementById('ai-log');
-        const style = (who === 'AI') ? 'bot' : 'user';
-        log.innerHTML += `<div class="${style}"><b>${who}:</b> ${text}</div>`;
-        log.scrollTop = log.scrollHeight;
-    }
-
-    async function talk() {
-        const i = document.getElementById('ai-in');
-        if(!i.value.trim()) return;
-        const msg = i.value;
-        addLog('You', msg);
-        i.value = "";
-
-        try {
-            const res = await fetch(`${TUNNEL}/v1/chat/completions`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
-                body: JSON.stringify({
-                    model: "local-model",
-                    messages: [{role: "user", content: msg}],
-                    temperature: 0.8
-                })
-            });
-            const data = await res.json();
-            addLog('AI', data.choices[0].message.content);
-        } catch (e) {
-            addLog('AI', 'Error connecting to LM Studio. Check tunnel.');
-        }
-    }
-
-    function clearAI() {
-        document.getElementById('ai-log').innerHTML = '<div class="bot"><b>AI:</b> History purged.</div>';
-    }
-
-    // 3. SETTINGS FUNCTIONS
-    function updateProfile() {
-        const newName = document.getElementById('name-input').value;
-        if(newName) {
-            document.getElementById('display-name').innerText = newName;
-            alert('Settings Saved: Welcome ' + newName);
-            document.getElementById('name-input').value = "";
-        }
-    }
-
-    // 4. ADMIN FUNCTIONS
-    function unlockAdmin() {
-        const pin = document.getElementById('pin-code').value;
-        if(pin === '1973') {
-            document.getElementById('admin-lock').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-        } else {
-            alert('Access Denied: Invalid PIN');
-        }
-    }
-
-    function adminAction(actionText) {
-        go('ai');
-        addLog('AI', 'Admin Command Received: ' + actionText);
-    }
-
-    // 5. STORE & RATING FUNCTIONS
-    function downloadAPK() {
-        window.location.href = "https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/VERIFIED_NexusVPN.apk";
-        go('ai');
-        addLog('AI', 'Deployment initiated. Verify APK signature upon install.');
-    }
-
-    function rate(n) {
-        const stars = document.getElementById('star-row').children;
-        for(let i=0; i<5; i++) {
-            stars[i].classList.toggle('gold', i < n);
-        }
-    }
-</script>
-</body>
-</html>
+                <label style="color:var(--blue); font-size:12px;">USERNAME</label>
+                <input
