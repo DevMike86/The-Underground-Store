@@ -96,7 +96,6 @@
     let currentUser = "DevMike86";
     let currentAppFile = null;
 
-    // FIX 1: Works with 'this' to highlight buttons
     function go(id, el) {
         document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
         document.getElementById('v-' + id).classList.add('active');
@@ -104,12 +103,10 @@
         el.classList.add('active');
     }
 
-    // FIX 2: Updated with your new clean filename
     function handleAppTouch(name) {
         let downloadUrl = "";
         
         if (name === "Nexus VPN") {
-            // Updated to point specifically to nexus-vpn.apk
             downloadUrl = "https://raw.githubusercontent.com/DevMike86/The-Underground-Store/main/nexus-vpn.apk";
         } else if (currentAppFile && name === currentAppFile.name) {
             downloadUrl = URL.createObjectURL(currentAppFile);
@@ -173,4 +170,21 @@
                 const grid = document.getElementById('main-app-grid');
                 const newApp = document.createElement('div');
                 newApp.className = 'app-item';
-                newApp.onclick = () => handleAppTouch
+                newApp.onclick = () => handleAppTouch(file.name);
+                newApp.innerHTML = `<div class="app-icon">📦</div><div class="app-name">${file.name}</div>`;
+                grid.appendChild(newApp);
+            }
+        } catch (e) { addLog('AI', "Audit Bridge Offline."); }
+    }
+
+    function updateProfile() {
+        const name = document.getElementById('name-input').value;
+        if (name) {
+            currentUser = name;
+            document.getElementById('display-name').innerText = "User: " + name;
+            alert("Username Saved");
+        }
+    }
+</script>
+</body>
+</html>
